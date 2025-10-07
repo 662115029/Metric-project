@@ -1,0 +1,40 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main  # Runs the workflow when code is pushed to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build & Push Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/gamestore:latest .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/gamestore:latest
+
+      - name: SSH into AWS and Deploy
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.AWS_IP }} << 'EOF'
+          cd /home/ubuntu/my-gamestore
+          
+          # Create or overwrite the .env file
+          echo "$ENV_FILE" > .env
+          
+          # Pull the latest Docker image
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/gamestore:latest
+          
+          # Restart containers
+          docker-compose down
+          docker-compose up -d
+          EOF
