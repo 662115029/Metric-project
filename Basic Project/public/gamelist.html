@@ -1,0 +1,55 @@
+<!--
+**********************************************************************************
+THIS PAGE MUST INCLUDE:
+**********************************************************************************
+ - A list of all products from all categories!
+ - One page limits the display of products up to 15 products! Use DOM events to 
+   manage pagination of products!
+ - Products displayed must have original and promotional price visible at ALL
+   TIMES and on EVERY PAGE!
+**********************************************************************************
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamelist</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="assets/js/navbar.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+    <!-- for navbar -->
+    <div id="navbar-container"></div>
+    
+    <!-- for search bar -->
+    <div class="search-bar-container">
+        <input type="search" id="search-bar" placeholder="Search for a game...">
+    </div>
+
+    
+    <!-- Game List -->
+    <div class="game-list" is="game-list">
+        <!-- Game items will be populated here -->
+    </div>
+
+    <div class="game-detail-container" style="display: none;">
+        <button id="back-to-list" class="page-button">&larr; Back to List</button>
+        <div id="game-detail">
+            <!-- Game details will be dynamically loaded here -->
+        </div>
+    </div>
+    
+    <!-- arrow to scroll -->
+    <div class="pagination">
+        <button id="prev-page" class="page-button" disabled>&larr;</button>
+        <span id="page-info"></span>
+        <button id="next-page" class="page-button">&rarr;</button>
+    </div>
+
+    <script src="assets/js/gamelist.js"> </script>
+</body>
+</html>

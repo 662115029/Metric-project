@@ -1,0 +1,31 @@
+[
+    {
+        "categoryid": "1",
+        "thumbnail": "assets/images/fighting_icon.jpg",
+        "name": "Fighting"
+    },
+
+    {
+        "categoryid": "2",
+        "thumbnail": "assets/images/racing_icon.jpg",
+        "name": "Racing"
+    },
+
+    {
+        "categoryid": "3",
+        "thumbnail": "assets/images/farming_icon.jpg",
+        "name": "Survival"
+    },
+
+    {
+        "categoryid": "4",
+        "thumbnail": "assets/images/RPG_icon.jpg",
+        "name": "Role-Play"
+    },
+
+    {
+        "categoryid": "5",
+        "thumbnail": "assets/images/puzzle_icon.jpg",
+        "name": "Puzzle"
+    }
+]

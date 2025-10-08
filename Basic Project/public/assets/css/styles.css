@@ -1,0 +1,1011 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #250101;
+    color: white;
+}
+
+/*
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #171a21;
+    padding: 15px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    z-index: 1000;
+}
+*/
+
+/* Navbar styling */
+.navbar {
+    padding: 20px 60px 20px 60px;
+    margin-bottom: 20px;;
+    background-color: #281616;
+}
+
+.nav-links {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center; /* Vertically center the items */
+}
+
+.nav-links li {
+    margin: 0 15px;
+    position: relative;
+}
+
+
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 15px 15px;
+    display: inline-block; /* Ensures we can use transform without breaking layout */
+    transition: all 0.3s ease; /* Smooth transition for all properties */
+    background-color: #333; /* Change to a new color */
+    border-radius: 15px;
+}
+
+.nav-links li a:hover {
+    background-color: #777; /* Change to a new color */
+    transform: translateY(5px); /* Move the link down */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); /* Soft shadow for depth */
+}
+
+
+
+/* Dropdown Menu */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    list-style: none;
+    padding: 20px 5px;
+    min-width: 200px;
+    top: 100%;
+    left: 0;
+    border-radius: 15px;
+
+    z-index: 600; /* Ensures dropdown is in front of other elements */
+}
+
+.dropdown-menu li {
+    display: block;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 10px;
+    color: white;
+}
+
+.dropdown-menu li a:hover {
+    background-color: #666;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+
+/* Search Bar */
+.navbar-search-container {
+    display: inline-block;
+    background-color: #333; /* Keeps the background for the whole container */
+    padding: 12px 10px;
+    border-radius: 15px;
+}
+
+.navbar-search-container input {
+    font-size: 16px;
+    padding: 5px 10px;
+    border: none; /* No border for the input field */
+    border-radius: 5px;
+    background-color: transparent; /* Makes the input background blend with the container */
+    color: white; /* Text color */
+    outline: none; /* Removes default focus outline */
+    width: 200px; /* Adjust width as needed */
+}
+
+.navbar-search-container button {
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: transparent; /* Makes the button background blend with the container */
+    border: none; /* No border for the button */
+    border-radius: 5px;
+    margin-left: 5px; /* Space between input and button */
+}
+
+#logout-button {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 15px 15px;
+    display: inline-block;
+    transition: all 0.3s ease;
+    background-color: #333;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+}
+
+#logout-button:hover {
+    background-color: #777;
+    transform: translateY(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.game-list {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+.game {
+    background-color: #2a475e;
+    border-radius: 8px;
+    display: flex;
+    width: 700px;
+    margin: 10px;
+    padding: 10px;
+    align-items: center;
+}
+.game img {
+    width: 150px;
+    height: 80px;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+.game-info {
+    display: flex;
+    flex-direction: column;
+}
+.game h3, .game p {
+    margin: 5px 0;
+}
+
+/* Login Page Styling */
+.login-page {
+    background-color: #250101;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px;
+}
+
+.login-container h2 {
+    margin-bottom: 15px;
+    color: black;
+}
+
+.login-container input {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login-container button:first-of-type {
+    background-color: gray;
+    color: white;
+}
+
+.login-container button:last-of-type {
+    background-color: gray; 
+    color: white;
+}
+
+.forgot-link {
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+
+/* Categories Section Styling */
+.categories {
+    margin-top: 0px; /* Offset from the navbar */
+    margin-left: 60px;
+    margin-right: 60px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Responsive grid layout */
+    gap: 29px; /* Space between categories */
+    padding: 20px;
+    height: 360px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Individual Category Styling */
+.category {
+    background: linear-gradient(to bottom, #2C2C2C 0%, #281616 100%, #250101 100%); /* Subtle fade with a midpoint */
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex; /* Enable flexbox */
+    flex-direction: column; /* Align children vertically */
+    justify-content: first baseline;
+    align-items: center; /* Center content horizontally */
+    margin: 0px;
+    padding: 15px 5px 0 5px; /* Add 15px padding around the entire category content */
+    height: 376px;
+}
+
+/* Image Styling for Categories */
+.category img {
+    width: 91%; 
+    height: 200px; 
+    border-radius: 15px;
+    margin: 0 0 0 0;
+}
+
+/* Category Name Styling */
+.category h3 {
+    font-size: 32px;
+    margin: 0 0;
+    color: #fff;
+    padding: 25px;
+}
+
+/* Hover Effect for Categories */
+.category:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+.search-bar-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 35%;
+    padding: 10px 10px 10px 76px; /* Adjust padding to prevent overflow */
+}
+
+#search-bar {
+    width: 100%; /* Full width but respects padding */
+    max-width: 100%; /* Ensures no overflow */
+    padding: 12px 15px;
+    font-size: 18px;
+    border: 2px solid #2C2C2C;
+    border-radius: 15px;
+    background-color: #2C2C2C;
+    color: white;
+    outline: none;
+}
+
+
+#search-bar::placeholder {
+    color: white;
+    opacity: 0.7;
+}
+
+.no-results {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #555;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* For when user click on the search bar, add if u want, looks cool
+#search-bar:focus {
+    border-color: #2C2C2D;
+    box-shadow: 0 0 8px rgba(102, 192, 244, 0.6);
+}
+*/
+
+
+
+
+/* Responsive Adjustments for Smaller Screens */
+@media (max-width: 431px) {
+
+    .categories{
+        height: 100%;
+        padding: 5px;
+        margin: 0 100px 0 100px;
+    }
+
+    .category{
+        height: 240px;
+        padding: 15px 0px 0px 0px;
+        justify-content: center;
+    }
+
+    .category h3{
+        padding: 13px 0 13px 0;
+    }
+
+    .category img{
+        width: 175px; 
+        height: 160px; 
+    }
+
+
+    .search-bar-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        padding: 25px; /* Adjust padding to prevent overflow */
+    }
+
+}
+
+/* Mobile Menu Toggle Button */
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.menu-toggle .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+/* Consolidated Media Queries */
+@media (max-width: 768px) {
+    /* Mobile menu styling */
+    .menu-toggle {
+        display: block;
+    }
+    
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        padding: 15px;
+    }
+    
+    .navbar-search-container {
+        display: block;
+        position: relative;
+        width: 70%;
+        margin: 0;
+        order: 1;
+    }
+    
+    .navbar-search-container input {
+        width: 80%;
+    }
+    
+    .nav-links {
+        position: fixed;
+        top: -100vh;
+        left: 0;
+        flex-direction: column;
+        background-color: #281616;
+        width: 100%;
+        height: 100vh;
+        z-index: 999;
+        transition: all 0.5s ease;
+        padding-top: 20px;
+        overflow-y: auto;
+    }
+    
+    .nav-links.active {
+        top: 0;
+    }
+    
+    .nav-links .navbar-search-container {
+        display: none;
+    }
+    
+    .nav-links li {
+        margin: 10px 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Handle dropdown on mobile */
+    .dropdown-menu {
+        position: static;
+        display: none;
+        background-color: #333;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .dropdown-menu.show {
+        display: block;
+    }
+
+    /* Animated hamburger menu */
+    .menu-toggle.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .menu-toggle.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 431px) {
+    .categories {
+        height: 100%;
+        padding: 5px;
+        margin: 0 100px 0 100px;
+    }
+
+    .category {
+        height: 240px;
+        padding: 15px 0px 0px 0px;
+        justify-content: center;
+    }
+
+    .category h3 {
+        padding: 13px 0 13px 0;
+    }
+
+    .category img {
+        width: 175px; 
+        height: 160px; 
+    }
+}
+
+/* ============== GAME LIST CSS PAGE ============== */
+
+.game-list {
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 1200px; /* maximum width on very large screens */
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.game-item {
+    display: flex;
+    padding: 10px;
+    align-items: flex-start; 
+    width: 100%;
+    background: linear-gradient(to right, #2C2C2C 0%, #281616 100%, #250101 100%);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    box-sizing: border-box;
+    position: relative; 
+    justify-content: space-between; 
+}
+
+
+@media (min-width: 768px) {
+    .game-list {
+        padding: 0 20px;
+}
+    .search-container {
+        padding-left: 20px;
+        padding-right: 20px;
+}
+}
+
+.game-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.game-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.game-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-right: 10px; /* for space between the price and the title */
+}
+
+.game-price {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 5px;
+    margin-top: 3px; /*so that it aligns with title */
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #ff6b6b;
+    font-size: 0.9em;
+}
+
+.game-category {
+    background-color: #333;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    height: 20px; /* reduced height */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content; /* make width fit the content */
+    margin-top: 0; /* remove top margin */
+}
+
+
+
+
+.game-detail-btn {
+    background-color: #351111;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    height: fit-content;
+    align-self: center; 
+    margin-left: auto; /* to push button to the right */
+}
+
+.game-detail-btn:hover {
+    background-color: #45a049;
+}
+
+
+.pagination {
+    position: fixed;
+    bottom: 20px; /* sticks to the bottom */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.page-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid white;
+    padding: 10px 15px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.page-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-button:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* ============== HOME GAMELIST CSS PAGE ============== */
+
+
+
+
+/* ============== Library Page CSS ===============*/
+
+
+/* Container for purchased games */
+.purchased-games {
+    margin-top: 0px; /* offset from the navbar */
+    margin-left: 60px;
+    margin-right: 60px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* responsive grid layout */
+    gap: 29px; /* space between categories */
+    padding: 20px;
+    height: 360px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Individual game item */
+.purchased-game {
+    background: linear-gradient(to bottom, #2C2C2C 0%, #281616 100%, #250101 100%); /* Subtle fade with a midpoint */
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex; /* Enable flexbox */
+    flex-direction: column; /* Align children vertically */
+    justify-content: first baseline;
+    align-items: center; /* Center content horizontally */
+    margin: 0px;
+    padding: 15px 5px 0 5px; /* Add 15px padding around the entire category content */
+    height: 275px;
+}
+
+.purchased-game h3 {
+    font-size: 20px;
+    padding: 8px 0 10px 0;
+}
+
+
+/* Image Styling for Categories */
+.purchased-game img {
+    width: 160px; 
+    height: 240px; 
+    margin: 0 0 0 0;
+}
+
+
+/* Hover Effect for Categories */
+.purchased-game:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Responsive Adjustments for Smaller Screens */
+@media (max-width: 431px) {
+
+    .purchased-games{
+        height: 100%;
+        padding: 5px;
+        margin: 0 100px 0 100px;
+    }
+
+    .purchased-game{
+        height: 240px;
+        padding: 0px;
+        justify-content: center;
+        align-items: center; /* Center content horizontally */
+    }
+
+
+    .purchased-game img {
+        width: 150px; 
+        height: 210px; 
+    }
+}
+
+/* ============== END OF Library Page CSS ===============*/
+
+
+/* ============== HOME (INDEX) CSS PAGE ============== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 1000px;
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 100px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.prev {
+    left: 0;
+}
+
+.next {
+    right: 0;
+}
+
+.sale-banner {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background: linear-gradient(45deg, #ff0000, #cc0000);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+#saleCarousel img {
+    width: 100%; /* ensures the image spans the width of the carousel */
+    height: 400px; /* set a fixed height for all images */
+    object-fit: cover; /* might change it to contain */
+    
+}
+
+.sale-title {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.big-sale-text {
+    font-size: 72px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.section-heading {
+    text-align: center;
+    margin: 30px 0 15px;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.section-heading:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 1px;
+    background-color: #555;
+}
+
+.game-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.game {
+    background-color: #222;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    width: 100%;
+}
+
+.game:hover {
+    transform: translateY(-5px);
+}
+
+.game img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.game-info {
+    padding: 15px;
+}
+
+.game-info h3 {
+    margin-bottom: 10px;
+}
+
+.game-info p {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.card-img-top {
+    width: 100%; /* ensures the image spans the width of the card */
+    height: 200px; /* set a fixed height for all images */
+    object-fit: cover; /* ensures the image scales and crops to fit the dimensions */
+}
+
+
+/* ============== END OF HOME (INDEX) CSS PAGE ============== */
+
+
+
+
+/* ============== CSS FOR CATEGORIES PAGE ============== */
+
+
+    
+    #categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    /* Category styles */
+    .category {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        background-color: #f8f8f8;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        text-align: center; /* to center the text inside the container */
+    }
+    
+    .category:hover {
+        transform: scale(1.05);
+    }
+    
+    .category img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+    
+    /* Game cards layout */
+    #games-container {
+        padding: 20px;
+    }
+    
+    #games-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .game-card {
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(to bottom, #2C2C2C 0%, #281616 100%, #250101 100%);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .game-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+    /* Game Detail Button Styling */
+    .game-detail-btn {
+        background-color: #351111;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 10px;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .game-detail-btn:hover {
+        background-color: #45a049;
+    }
+    /* Back Button */
+    #back-to-categories {
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        font-size: 1em;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    #back-to-categories:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+    }
+    
+    /* No results message */
+    .no-results {
+        text-align: center;
+        font-size: 1.2em;
+        color: #888;
+    }
+
+    @media (max-width: 768px) {
+    .game-card {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .game-image img {
+        height: 150px;
+    }
+
+    .game-details {
+        padding: 10px;
+    }
+
+    .game-title {
+        font-size: 1em;
+    }
+
+    .game-description {
+        font-size: 0.8em;
+    }
+
+    .game-price {
+        font-size: 0.9em;
+    }
+}
+    
+/* ============== END OF CATEGORIES CSS PAGE ============== */

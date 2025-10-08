@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Category Management</title>
+    <link rel="stylesheet" href="./assets/css/admin-styles.css">
+    <script src="./assets/js/admin-navbar.js"></script>
+</head>
+<body>
+    <!-- for navbar -->
+    <div id="navbar-container"></div>
+    
+    <!-- Main container with two columns -->
+    <div class="main-container">
+        <!-- Left Column -->
+        <div class="left-column">
+            <!-- Links Container -->
+            <h2 class="column-title">Category Management</h2>
+            <div class="links-container">
+                <div class="link-item">
+                    <a href="./add-category.html">
+                        <h3>Add a New Category</h3>
+                        <p>Create a new game category for the store</p>
+                    </a>
+                </div>
+                <div class="link-item">
+                    <a href="update-category.html">
+                        <h3>Update a Category</h3>
+                        <p>Change or update category information</p>
+                    </a>
+                </div>
+                <div>
+
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    
+        <!-- Right Column -->
+        <div class="right-column">
+            <h2 class="column-title">Category List</h2>
+            <!-- Search Bar and Category Dropdown Container -->
+            <div class="search-bar-container">
+                <input type="search" id="search-bar" placeholder="Search for a category...">
+            </div>
+
+            <!-- Categories Container -->
+            <div class="categories" id="categories"></div>
+
+            <!-- Games Container (Initially hidden) -->
+            <div class="games-container" id="games-container" style="display: none;">
+                <button id="back-to-categories" onclick="showCategories()">Back to Categories</button>
+                <div id="games-list"></div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="./assets/js/category-management.js"> </script>
+</body>
+</html>

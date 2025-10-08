@@ -1,0 +1,26 @@
+[
+    {
+        "gameid": "1",
+        "thumbnail": "assets/images/toilet_kid.jpg",
+        "name": "Boy vs. Toilet",
+        "releaseDate": "2024-01-10",
+        "price": "$19.99",
+        "developer": "Poopy Studios"
+    },
+    {
+        "gameid": "2",
+        "thumbnail": "assets/images/toilet_kid.jpg",
+        "name": "Sewer Child 2",
+        "releaseDate": "2023-11-05",
+        "price": "$29.99",
+        "developer": "Lavatory Interactive"
+    },
+    {
+        "gameid": "3",
+        "thumbnail": "assets/images/toilet_kid.jpg",
+        "name": "Latrine Lad II",
+        "releaseDate": "2022-09-20",
+        "price": "$39.99",
+        "developer": "Sadness"
+    }
+]

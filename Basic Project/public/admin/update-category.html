@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Category</title>
+    <link rel="stylesheet" href="../assets/css/admin-styles.css">
+    <style>
+        body {
+            color: black;
+            background-color: #250101;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Gill Sans', Calibri, sans-serif;
+        }
+
+        .admin-container {
+            background: linear-gradient(to bottom, #ddd 30%, #281616 100%);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-sizing: border-box;
+            min-height: 500px; /* Increased height */
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 10px;
+            text-align: center; /* Centering the input and label elements */
+        }
+
+        label {
+            font-size: 16px;
+            width: 100%;
+            max-width: 250px;
+            display: inline-block; /* Ensure label takes up full width */
+            text-align: left; /* Align the label text to the left */
+        }
+
+        input, textarea, select {
+            padding: 8px 12px;  /* Reduced padding: 8px top/bottom, 12px left/right */
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;  /* Ensures the input takes up the full width of its container */
+            max-width: 450px;  /* Ensuring consistency */
+            box-sizing: border-box; /* Includes padding in the width calculation */
+        }
+
+        textarea {
+            height: 80px;
+            resize: none;
+        }
+
+        .upload-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            width: auto;
+            max-width: 240px; /* Same as input width */
+            margin: 20px 0;
+        }
+
+        img#previewImage {
+            margin-top: 10px;
+            max-width: 100%;
+            border-radius: 5px;
+            display: none;
+        }
+
+        button ,a{
+            background-color: white;
+            padding: 10px 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            color: black
+        }
+
+        button:hover {
+            background-color: #d1d1d1;
+        }
+
+        @media (max-width: 600px) {
+            .admin-container {
+                max-width: 90%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Update Category Information</h1>
+        <form id="categoryForm">
+            <label for="categorySelect">Select Category:</label>
+            <select id="categorySelect" required>
+                <option value="">Select a category</option>
+            </select>
+
+            <label>Category Name:
+                <input type="text" id="categoryName" required>
+            </label>
+
+            <div class="upload-box" id="dropZone">
+                <p>Drag & Drop an image or click to upload</p>
+                <input type="file" id="categoryIcon" accept="image/*" hidden>
+            </div>
+            <img id="previewImage" src="" alt="Preview">
+
+            <button type="submit">Update Category</button>
+            <a href="./category-management.html">Return to action selection</a>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("dropZone").addEventListener("click", () => {
+            document.getElementById("categoryIcon").click();
+        });
+
+        document.getElementById("categoryIcon").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("previewImage").src = e.target.result;
+                    document.getElementById("previewImage").style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            const categorySelect = document.getElementById("categorySelect");
+
+            async function fetchCategories() {
+                try {
+                    const response = await fetch("http://localhost:3000/api/categories");
+                    const categories = await response.json();
+
+                    categories.forEach(category => {
+                        const option = document.createElement("option");
+                        option.value = category.id;
+                        option.textContent = category.name;
+                        categorySelect.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error("Error fetching categories:", error);
+                }
+            }
+
+            await fetchCategories();
+        });
+
+        document.getElementById("categoryForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            
+            const categoryId = document.getElementById("categorySelect").value;
+            const formData = new FormData();
+            formData.append("category_name", document.getElementById("categoryName").value);
+            formData.append("icon", document.getElementById("categoryIcon").files[0]);
+
+            // Get admin token from localStorage (you need to set this when admin logs in)
+            const token = localStorage.getItem("adminToken");
+            
+            if (!token) {
+                alert("You must be logged in as an admin to update categories");
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/categories/${categoryId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: formData
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message || "Failed to update category");
+                
+                alert("Category updated successfully!");
+                window.location.reload();
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
