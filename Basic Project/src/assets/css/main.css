@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar styles */
+@layer utilities {
+  .scrollbar-custom::-webkit-scrollbar {
+    @apply w-3;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-track {
+    @apply bg-gray-800 rounded-lg;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    @apply bg-gray-600 rounded-lg border-2 border-gray-800;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
+  }
+}
+
+/* Custom component classes */
+@layer components {
+  /* Game item hover effect */
+  .game-item-hover {
+    @apply transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-lg;
+  }
+  
+  /* Category card hover effect */
+  .category-hover {
+    @apply transition-all duration-300 ease-in-out hover:-translate-y-2.5 hover:shadow-2xl;
+  }
+  
+  /* Button base styles */
+  .btn-base {
+    @apply px-4 py-2 rounded-lg transition-all duration-300 ease-in-out;
+  }
+  
+  /* Nav link styles */
+  .nav-link {
+    @apply text-white no-underline text-lg px-4 py-3 inline-block bg-light-gray rounded-2xl 
+           transition-all duration-300 ease-in-out hover:bg-gray-500 hover:translate-y-1 
+           hover:shadow-md;
+  }
+}
