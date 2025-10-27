@@ -23,18 +23,28 @@ const route = useRoute()
 const username = ref('')
 const password = ref('')
 
-const handleLogin = async () => {
-  // TODO: เรียก API จริง
-  localStorage.setItem('token', 'dummy-token')
+// ตัวอย่างเงื่อนไขที่รองรับหลายรูปแบบ
+const SPECIAL_ADMIN_CODES = ['#root', '#admin', '9999']
+const isAdminId = (u) => {
+  const s = (u || '').trim()
+  return s.startsWith('admin:') || SPECIAL_ADMIN_CODES.includes(s)
+}
 
+const handleLogin = async () => {
+  // ถ้าเป็นไอดี/รหัสพิเศษ → ไปหน้า AdminLogin ทันที
+  if (isAdminId(username.value)) {
+    router.push({ name: 'adminlogin', query: { from: 'login' } })
+    return
+  }
+
+  // …ลอจิกล็อกอินผู้ใช้ทั่วไป…
+  // ตัวอย่างจำลอง:
+  localStorage.setItem('token', 'dummy-token')
   const redirect = route.query.redirect?.toString()
   router.push(redirect || { name: 'index' })
 }
-
-const goToRegister = () => {
-  router.push({ name: 'register' })
-}
 </script>
+
 
 <style scoped>
 /* สไตล์ของหน้า login ตามต้องการ */

@@ -7,6 +7,7 @@ import GameListView from '@/views/GameListView.vue'
 import libraryView from '@/views/libraryView.vue'
 import HelpView from '@/views/HelpView.vue'
 import ForgotPasswordView from '@/views/ForgotPasswordView.vue'
+import AdminLoginView from '@/views/AdminLoginView.vue'
 
 const routes = [
   { path: '/', redirect: { name: 'login' } },
@@ -18,7 +19,10 @@ const routes = [
   { path: '/gamelist', name: 'gamelist', component: GameListView },
   { path: '/library', name: 'library', component: libraryView },
   { path: '/help', name: 'help', component: HelpView },
-  { path: '/forgot-link', name: 'forgot-link', component: ForgotPasswordView }
+  { path: '/forgot-link', name: 'forgot-link', component: ForgotPasswordView },
+
+  // --- admin ---
+  { path: '/admin/login', name: 'adminlogin', component: AdminLoginView },
 ]
 
 const router = createRouter({
@@ -26,13 +30,18 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, from, next) => {
+// guards
+router.beforeEach((to, _from, next) => {
   const authed = !!localStorage.getItem('token')
+  const adminAuthed = !!localStorage.getItem('adminToken')
+
   if (to.meta.requiresAuth && !authed) {
-    next({ name: 'login', query: { redirect: to.fullPath } })
-  } else {
-    next()
+    return next({ name: 'login', query: { redirect: to.fullPath } })
   }
+  if (to.meta.requiresAdmin && !adminAuthed) {
+    return next({ name: 'adminlogin', query: { redirect: to.fullPath } })
+  }
+  next()
 })
 
 export default router
