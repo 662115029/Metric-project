@@ -3,73 +3,88 @@
     <!-- Optional: include your AdminNavbar component here -->
     <!-- <AdminNavbar /> -->
 
-    <div class="main-container">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 p-4">
       <!-- Left Column -->
-      <div class="left-column">
-        <h2 class="column-title">Game Management</h2>
-        <div class="links-container">
-          <div class="link-item">
+      <div>
+        <h2 class="m-0 mb-3 text-xl font-bold">Game Management</h2>
+        <div class="grid gap-3">
+          <div>
             <Anchor :to="links.game.add">
-              <h3>Add a New Game</h3>
-              <p>Create a new listing for a game and give it the proper tags to stand out.</p>
+              <div class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] text-[#111] no-underline hover:opacity-90 transition-opacity">
+                <h3 class="m-0 mb-1 font-semibold">Add a New Game</h3>
+                <p class="m-0 text-sm text-gray-700">Create a new listing for a game and give it the proper tags to stand out.</p>
+              </div>
             </Anchor>
           </div>
-          <div class="link-item">
+          <div>
             <Anchor :to="links.game.update">
-              <h3>Update Selected Game</h3>
-              <p>Change the listing for an existing game and update its information, media, or price.</p>
+              <div class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] text-[#111] no-underline hover:opacity-90 transition-opacity">
+                <h3 class="m-0 mb-1 font-semibold">Update Selected Game</h3>
+                <p class="m-0 text-sm text-gray-700">Change the listing for an existing game and update its information, media, or price.</p>
+              </div>
             </Anchor>
           </div>
         </div>
       </div>
 
       <!-- Right Column -->
-      <div class="right-column">
-        <h2 class="column-title">Game List</h2>
+      <div>
+        <h2 class="m-0 mb-3 text-xl font-bold">Game List</h2>
 
         <!-- Search + Category Filter -->
-        <div class="search-bar-container">
+        <div class="flex gap-2.5 mb-3">
           <input
             type="search"
             id="search-bar"
             v-model.trim="query"
             placeholder="Search for a game..."
             @input="debounceSearch()"
+            class="flex-1 py-2.5 px-3 rounded-lg border border-gray-300 box-border focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <select id="category-filter" v-model="categoryId" @change="applyFilters">
+          <select 
+            id="category-filter" 
+            v-model="categoryId" 
+            @change="applyFilters"
+            class="flex-1 py-2.5 px-3 rounded-lg border border-gray-300 box-border focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
             <option value="">All categories</option>
             <option v-for="c in categories" :key="c.id" :value="String(c.id)">{{ c.name }}</option>
           </select>
         </div>
 
         <!-- List -->
-        <div class="game-list">
-          <div v-if="isLoading" class="loading">Loading games…</div>
-          <div v-else-if="!filteredGames.length" class="empty">No games found</div>
+        <div class="grid gap-3">
+          <div v-if="isLoading" class="text-gray-600 p-3">Loading games…</div>
+          <div v-else-if="!filteredGames.length" class="text-gray-600 p-3">No games found</div>
 
-          <article v-else v-for="g in filteredGames" :key="g.id" class="game-row">
+          <article 
+            v-else 
+            v-for="g in filteredGames" 
+            :key="g.id" 
+            class="grid grid-cols-[120px_1fr] gap-3 bg-white border border-gray-300 rounded-lg p-2.5"
+          >
             <img
               v-if="g.thumbnailUrl || g.thumbnail"
               :src="g.thumbnailUrl || g.thumbnail"
               alt="thumbnail"
-              class="thumb"
+              class="w-full h-full object-cover rounded-lg"
               loading="lazy"
             />
-            <div class="meta">
-              <h3 class="title">{{ g.title }}</h3>
-              <div class="sub">
-                <span class="dev" v-if="g.developer">{{ g.developer }}</span>
-                <span class="release" v-if="g.release_date"> · {{ formatDate(g.release_date) }}</span>
+            <div>
+              <h3 class="m-0 mb-1 font-bold text-base">{{ g.title }}</h3>
+              <div class="text-gray-600 mb-1.5 text-sm">
+                <span v-if="g.developer">{{ g.developer }}</span>
+                <span v-if="g.release_date"> · {{ formatDate(g.release_date) }}</span>
               </div>
-              <div class="price-row">
-                <span class="price promo" v-if="Number(g.promo_price) > 0">
+              <div class="flex gap-2 items-baseline mb-1.5">
+                <span class="font-bold text-green-600" v-if="Number(g.promo_price) > 0">
                   ${{ Number(g.promo_price).toFixed(2) }}
                 </span>
-                <span :class="{ strike: Number(g.promo_price) > 0 }">
+                <span :class="{ 'line-through text-gray-500': Number(g.promo_price) > 0 }">
                   ${{ Number(g.price || 0).toFixed(2) }}
                 </span>
               </div>
-              <p class="desc" v-if="g.description">{{ g.description }}</p>
+              <p class="text-gray-800 m-0 mt-1.5 text-sm" v-if="g.description">{{ g.description }}</p>
             </div>
           </article>
         </div>
@@ -177,66 +192,3 @@ onMounted(async () => {
   await Promise.all([loadCategories(), loadGames()])
 })
 </script>
-
-<style scoped>
-.main-container {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 24px;
-  padding: 16px;
-}
-
-.left-column .column-title,
-.right-column .column-title {
-  margin: 0 0 12px;
-}
-
-.links-container { display: grid; gap: 12px; }
-
-.link-item a {
-  display: block;
-  padding: 14px 16px;
-  border-radius: 12px;
-  background: linear-gradient(to bottom, #ddd 30%, #281616 100%);
-  color: #111;
-  text-decoration: none;
-}
-.link-item a:hover { opacity: 0.92; }
-
-.search-bar-container { display: flex; gap: 10px; margin-bottom: 12px; }
-#search-bar, #category-filter {
-  flex: 1;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-
-.game-list { display: grid; gap: 12px; }
-.game-row {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 12px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 10px;
-}
-.thumb {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-}
-.meta .title { margin: 0 0 4px; }
-.sub { color: #555; margin-bottom: 6px; }
-.price-row { display: flex; gap: 8px; align-items: baseline; }
-.price-row .strike { text-decoration: line-through; color: #777; }
-.desc { color: #333; margin: 6px 0 0; }
-
-.loading, .empty { color: #555; padding: 12px; }
-
-@media (max-width: 900px) {
-  .main-container { grid-template-columns: 1fr; }
-}
-</style>

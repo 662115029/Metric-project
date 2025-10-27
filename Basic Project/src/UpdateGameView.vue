@@ -1,63 +1,155 @@
 <template>
-  <div class="admin-container">
-    <!-- Left Column -->
-    <div class="left-column">
-      <h1>Update Game Info</h1>
-      <form id="gameForm" @submit.prevent="onSubmit">
-        <label for="gameSelect">Select Game:</label>
-        <select id="gameSelect" v-model="selectedGameId" required @change="onPickGame">
-          <option value="">Select a game</option>
-          <option v-for="g in games" :key="gameKey(g)" :value="String(gameKey(g))">
-            {{ g.title }}
-          </option>
-        </select>
+  <div class="flex justify-center items-center min-h-screen p-5 bg-[#250101]">
+    <div class="bg-gradient-to-b from-[#ddd] from-30% to-[#281616] p-5 rounded-[10px] shadow-lg text-center w-full max-w-[800px] flex flex-col md:flex-row gap-5 box-border">
+      <!-- Left Column -->
+      <div class="flex flex-col justify-center items-center gap-[15px] w-full md:w-1/2">
+        <h1 class="text-[30px] md:text-[26px] lg:text-[30px] pt-10 md:pt-10 mb-[10px] text-black font-['Gill_Sans',sans-serif]">
+          Update Game Info
+        </h1>
+        
+        <form id="gameForm" @submit.prevent="onSubmit" class="flex flex-col items-center w-full gap-[10px]">
+          <label for="gameSelect" class="flex flex-col text-left text-base w-full max-w-[250px] font-['Gill_Sans',sans-serif]">
+            Select Game:
+            <select 
+              id="gameSelect" 
+              v-model="selectedGameId" 
+              required 
+              @change="onPickGame"
+              class="p-[10px] text-base border border-[#ccc] rounded-[5px] w-auto"
+            >
+              <option value="">Select a game</option>
+              <option v-for="g in games" :key="gameKey(g)" :value="String(gameKey(g))">
+                {{ g.title }}
+              </option>
+            </select>
+          </label>
 
-        <label>Title:
-          <input type="text" id="gameTitle" v-model.trim="title" required />
-        </label>
+          <label class="flex flex-col text-left text-base w-full max-w-[250px] font-['Gill_Sans',sans-serif]">
+            Title:
+            <input 
+              type="text" 
+              id="gameTitle" 
+              v-model.trim="title" 
+              required 
+              class="p-[10px] md:p-2 text-base md:text-sm border border-[#ccc] rounded-[5px] w-auto"
+            />
+          </label>
 
-        <label>Release Date:
-          <input type="date" id="gameReleaseDate" v-model="releaseDate" required />
-        </label>
+          <label class="flex flex-col text-left text-base w-full max-w-[250px] font-['Gill_Sans',sans-serif]">
+            Release Date:
+            <input 
+              type="date" 
+              id="gameReleaseDate" 
+              v-model="releaseDate" 
+              required 
+              class="p-[10px] md:p-2 text-base md:text-sm border border-[#ccc] rounded-[5px] w-auto"
+            />
+          </label>
 
-        <label>Price:
-          <input type="number" id="gamePrice" step="0.01" v-model.number="price" required />
-        </label>
+          <label class="flex flex-col text-left text-base w-full max-w-[250px] font-['Gill_Sans',sans-serif]">
+            Price:
+            <input 
+              type="number" 
+              id="gamePrice" 
+              step="0.01" 
+              v-model.number="price" 
+              required 
+              class="p-[10px] md:p-2 text-base md:text-sm border border-[#ccc] rounded-[5px] w-auto"
+            />
+          </label>
 
-        <label>Promotional Price:
-          <input type="number" id="gamePromoPrice" step="0.01" v-model.number="promoPrice" required />
-        </label>
+          <label class="flex flex-col text-left text-base w-full max-w-[250px] font-['Gill_Sans',sans-serif]">
+            Promotional Price:
+            <input 
+              type="number" 
+              id="gamePromoPrice" 
+              step="0.01" 
+              v-model.number="promoPrice" 
+              required 
+              class="p-[10px] md:p-2 text-base md:text-sm border border-[#ccc] rounded-[5px] w-auto"
+            />
+          </label>
 
-        <label>Developer:
-          <input type="text" id="gameDeveloper" v-model.trim="developer" required />
-        </label>
+          <label class="flex flex-col text-left text-base w-full max-w-[250px] font-['Gill_Sans',sans-serif]">
+            Developer:
+            <input 
+              type="text" 
+              id="gameDeveloper" 
+              v-model.trim="developer" 
+              required 
+              class="p-[10px] md:p-2 text-base md:text-sm border border-[#ccc] rounded-[5px] w-auto"
+            />
+          </label>
 
-        <label>Description:
-          <textarea id="gameDescription" v-model.trim="description" required />
-        </label>
+          <label class="flex flex-col text-left text-base w-full max-w-[250px] font-['Gill_Sans',sans-serif]">
+            Description:
+            <textarea 
+              id="gameDescription" 
+              v-model.trim="description" 
+              required 
+              class="p-[10px] md:p-2 text-base md:text-sm border border-[#ccc] rounded-[5px] w-auto h-20 resize-none"
+            />
+          </label>
 
-        <label for="category">Category:</label>
-        <select id="category" name="category" v-model="categoryId" required>
-          <option value="">Select a category</option>
-          <option v-for="c in categories" :key="c.id" :value="String(c.id)">{{ c.name }}</option>
-        </select>
+          <label for="category" class="flex flex-col text-left text-base w-full max-w-[250px] font-['Gill_Sans',sans-serif]">
+            Category:
+            <select 
+              id="category" 
+              name="category" 
+              v-model="categoryId" 
+              required
+              class="p-[10px] text-base border border-[#ccc] rounded-[5px] w-auto"
+            >
+              <option value="">Select a category</option>
+              <option v-for="c in categories" :key="c.id" :value="String(c.id)">{{ c.name }}</option>
+            </select>
+          </label>
 
-        <button type="submit" :disabled="isSubmitting">{{ isSubmitting ? 'Updating…' : 'Update info' }}</button>
-        <a href="./game-management.html">Return to action selection</a>
-      </form>
-    </div>
-
-    <!-- Right Column -->
-    <div class="right-column">
-      <div class="upload-box" id="dropZone"
-           @click="openPicker"
-           @dragover.prevent
-           @dragenter.prevent
-           @drop.prevent="onDrop">
-        <p>Drag & Drop an image or click to upload</p>
-        <input ref="fileInput" type="file" id="gameThumbnail" accept="image/*" hidden @change="onFileChange" />
+          <button 
+            type="submit" 
+            :disabled="isSubmitting"
+            class="bg-white p-[10px_15px] md:p-[10px_15px] text-lg md:text-base rounded-[5px] border-0 cursor-pointer transition-colors duration-300 text-black hover:bg-[#d1d1d1] disabled:opacity-50 disabled:cursor-not-allowed font-['Gill_Sans',sans-serif]"
+          >
+            {{ isSubmitting ? 'Updating…' : 'Update info' }}
+          </button>
+          
+          <a 
+            href="./game-management.html"
+            class="bg-white p-[10px_15px] text-lg rounded-[5px] cursor-pointer transition-colors duration-300 no-underline text-black hover:bg-[#d1d1d1] font-['Gill_Sans',sans-serif]"
+          >
+            Return to action selection
+          </a>
+        </form>
       </div>
-      <img v-if="previewUrl" id="previewImage" :src="previewUrl" alt="Preview" style="max-width:200px;" />
+
+      <!-- Right Column -->
+      <div class="flex flex-col items-center justify-center w-full md:w-1/2 p-0">
+        <div 
+          class="bg-white p-[30px] md:p-5 rounded-[10px] border-2 border-gray-500 text-center cursor-pointer w-4/5 h-full my-5"
+          id="dropZone"
+          @click="openPicker"
+          @dragover.prevent
+          @dragenter.prevent
+          @drop.prevent="onDrop"
+        >
+          <p class="font-['Gill_Sans',sans-serif]">Drag & Drop an image or click to upload</p>
+          <input 
+            ref="fileInput" 
+            type="file" 
+            id="gameThumbnail" 
+            accept="image/*" 
+            hidden 
+            @change="onFileChange" 
+          />
+        </div>
+        <img 
+          v-if="previewUrl" 
+          id="previewImage" 
+          :src="previewUrl" 
+          alt="Preview" 
+          class="mt-[15px] max-w-full md:max-w-[80%] rounded-[5px]"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -218,67 +310,3 @@ onBeforeUnmount(() => {
   }
 })
 </script>
-
-<style scoped>
-body {
-  color: black;
-  background-color: #250101;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  padding: 20px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-.admin-container {
-  background: linear-gradient(to bottom, #ddd 30%, #281616 100%);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  width: 100%;
-  max-width: 800px; /* Adjusted for two columns */
-  display: flex;
-  flex-direction: row; /* Creates a two-column layout */
-  gap: 20px;
-  box-sizing: border-box;
-}
-
-.left-column { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px; width: 50%; }
-
-h1 { font-size: 30px; padding-top: 10px; margin-bottom: 10px; color: black; }
-
-form { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 10px; }
-
-label { display: flex; flex-direction: column; text-align: left; font-size: 16px; width: 100%; max-width: 250px; }
-
-input, textarea, select { padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; width: auto; }
-
-textarea { height: 80px; resize: none; }
-
-button, a { background-color: white; padding: 10px 15px; font-size: 18px; border-radius: 5px; border: none; cursor: pointer; transition: background-color 0.3s ease; text-decoration: none; color: black; }
-
-button:hover { background-color: #d1d1d1; }
-
-.right-column { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 50%; padding: 0; }
-
-.upload-box { background: white; padding: 30px; border-radius: 10px; border: 2px solid gray; text-align: center; cursor: pointer; width: 80%; height: 100%; margin: 20px 0; }
-
-#previewImage { margin-top: 15px; max-width: 100%; border-radius: 5px; }
-
-@media (max-width: 900px) {
-  .admin-container { flex-direction: column; max-width: 90%; }
-  .left-column, .right-column { width: 100%; }
-  h1 { font-size: 26px; padding-top: 40px; }
-}
-
-@media (max-width: 600px) {
-  .left-column { gap: 10px; }
-  input, textarea { font-size: 14px; padding: 8px; }
-  button { font-size: 16px; }
-  .upload-box { padding: 20px; }
-  #previewImage { max-width: 80%; }
-}
-</style>

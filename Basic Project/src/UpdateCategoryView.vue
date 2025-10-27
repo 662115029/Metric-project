@@ -1,37 +1,84 @@
 <template>
-  <div class="admin-container">
-    <h1>Update Category Information</h1>
+  <div class="text-black bg-[#250101] flex justify-center items-center min-h-screen m-0 p-5 font-['Gill_Sans',Calibri,sans-serif]">
+    <div class="bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] p-5 rounded-lg shadow-[0px_4px_8px_rgba(0,0,0,0.2)] text-center w-full max-w-[400px] flex flex-col items-center gap-5 box-border min-h-[500px] sm:max-w-[90%]">
+      <h1 class="text-[28px] mb-3.5 font-bold">Update Category Information</h1>
 
-    <form id="categoryForm" @submit.prevent="onSubmit">
-      <label for="categorySelect">Select Category:</label>
-      <select id="categorySelect" v-model="selectedId" required @change="onPick">
-        <option value="">Select a category</option>
-        <option v-for="c in categories" :key="c.id" :value="String(c.id)">
-          {{ c.name }}
-        </option>
-      </select>
+      <form 
+        id="categoryForm" 
+        @submit.prevent="onSubmit"
+        class="flex flex-col items-center w-full gap-2.5 text-center"
+      >
+        <label for="categorySelect" class="text-base w-full max-w-[250px] inline-block text-left font-medium">
+          Select Category:
+        </label>
+        <select 
+          id="categorySelect" 
+          v-model="selectedId" 
+          required 
+          @change="onPick"
+          class="py-2 px-3 text-base border border-gray-300 rounded w-full max-w-[450px] box-border focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Select a category</option>
+          <option v-for="c in categories" :key="c.id" :value="String(c.id)">
+            {{ c.name }}
+          </option>
+        </select>
 
-      <label>
-        Category Name:
-        <input type="text" id="categoryName" v-model.trim="name" required />
-      </label>
+        <label class="text-base w-full max-w-[250px] inline-block text-left font-medium mt-2">
+          Category Name:
+          <input 
+            type="text" 
+            id="categoryName" 
+            v-model.trim="name" 
+            required 
+            class="py-2 px-3 text-base border border-gray-300 rounded w-full max-w-[450px] box-border mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </label>
 
-      <div class="upload-box" id="dropZone"
-           @click="openPicker"
-           @dragover.prevent
-           @dragenter.prevent
-           @drop.prevent="onDrop">
-        <p>Drag & Drop an image or click to upload</p>
-        <input ref="fileInput" type="file" id="categoryIcon" accept="image/*" hidden @change="onFileChange" />
-      </div>
+        <div 
+          class="bg-white p-7 rounded-lg text-center cursor-pointer w-auto max-w-[240px] my-5 border-2 border-dashed border-gray-300 hover:border-gray-400 transition-colors" 
+          id="dropZone"
+          @click="openPicker"
+          @dragover.prevent
+          @dragenter.prevent
+          @drop.prevent="onDrop"
+        >
+          <p class="m-0 text-gray-600">Drag & Drop an image or click to upload</p>
+          <input 
+            ref="fileInput" 
+            type="file" 
+            id="categoryIcon" 
+            accept="image/*" 
+            hidden 
+            @change="onFileChange" 
+          />
+        </div>
 
-      <img v-if="previewUrl" :src="previewUrl" id="previewImage" alt="Preview" />
+        <img 
+          v-if="previewUrl" 
+          :src="previewUrl" 
+          id="previewImage" 
+          alt="Preview" 
+          class="mt-2.5 max-w-full rounded"
+        />
 
-      <button type="submit" :disabled="isSubmitting">{{ isSubmitting ? 'Updating…' : 'Update Category' }}</button>
+        <button 
+          type="submit" 
+          :disabled="isSubmitting"
+          class="bg-white hover:bg-gray-300 disabled:bg-gray-400 disabled:cursor-not-allowed py-2.5 px-4 text-lg rounded border-none cursor-pointer transition-colors text-black mt-2"
+        >
+          {{ isSubmitting ? 'Updating…' : 'Update Category' }}
+        </button>
 
-      <!-- If using Router, replace with <RouterLink> -->
-      <a href="./category-management.html">Return to action selection</a>
-    </form>
+        <!-- If using Router, replace with <RouterLink> -->
+        <a 
+          href="./category-management.html"
+          class="bg-white hover:bg-gray-300 py-2.5 px-4 text-lg rounded border-none cursor-pointer transition-colors no-underline text-black inline-block"
+        >
+          Return to action selection
+        </a>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -129,91 +176,3 @@ onMounted(loadCategories)
 
 onBeforeUnmount(() => { if (previewUrl.value) URL.revokeObjectURL(previewUrl.value) })
 </script>
-
-<style scoped>
-body {
-  color: black;
-  background-color: #250101;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  padding: 20px;
-  font-family: 'Gill Sans', Calibri, sans-serif;
-}
-
-.admin-container {
-  background: linear-gradient(to bottom, #ddd 30%, #281616 100%);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  box-sizing: border-box;
-  min-height: 500px; /* Increased height */
-}
-
-h1 { font-size: 28px; margin-bottom: 15px; }
-
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  gap: 10px;
-  text-align: center;
-}
-
-label { font-size: 16px; width: 100%; max-width: 250px; display: inline-block; text-align: left; }
-
-input, textarea, select {
-  padding: 8px 12px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
-  max-width: 450px;
-  box-sizing: border-box;
-}
-
-textarea { height: 80px; resize: none; }
-
-.upload-box {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  text-align: center;
-  cursor: pointer;
-  width: auto;
-  max-width: 240px;
-  margin: 20px 0;
-}
-
-#previewImage {
-  margin-top: 10px;
-  max-width: 100%;
-  border-radius: 5px;
-}
-
-button, a {
-  background-color: white;
-  padding: 10px 15px;
-  font-size: 18px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-decoration: none;
-  color: black;
-}
-
-button:hover { background-color: #d1d1d1; }
-
-@media (max-width: 600px) { .admin-container { max-width: 90%; } }
-</style>
