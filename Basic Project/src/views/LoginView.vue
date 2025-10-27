@@ -3,53 +3,39 @@
     <div class="login-container">
       <h2>Login</h2>
       <form @submit.prevent="handleLogin" id="loginForm">
-        <input
-          type="text"
-          v-model="username"
-          id="loginUsername"
-          placeholder="Username"
-          required
-        />
-        <input
-          type="password"
-          v-model="password"
-          id="loginPassword"
-          placeholder="Password"
-          required
-        />
+        <input type="text" v-model="username" id="loginUsername" placeholder="Username" required />
+        <input type="password" v-model="password" id="loginPassword" placeholder="Password" required />
         <button type="submit">Login</button>
-        <button type="button" @click="goToRegister" id="goToRegister">
-          Register
-        </button>
-        <a href="forgot-password.html" class="forgot-link"
-          >Forgot email/password?</a
-        >
+        <button type="button" @click="goToRegister" id="goToRegister">Register</button>
+        <RouterLink class="forgot-link" :to="{ name: 'register' }">Forgot email/password?</RouterLink>
       </form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
-// Reactive form data
-const username = ref("")
-const password = ref("")
+const router = useRouter()
+const route = useRoute()
 
-// Handle login submit
-const handleLogin = () => {
-  // You can call your old JS function here, or implement directly
-  // For example, if authentication.js exposes login():
-  if (window.login) {
-    window.login(username.value, password.value)
-  } else {
-    console.log("Login attempted:", username.value, password.value)
-  }
+const username = ref('')
+const password = ref('')
+
+const handleLogin = async () => {
+  // TODO: เรียก API จริง
+  localStorage.setItem('token', 'dummy-token')
+
+  const redirect = route.query.redirect?.toString()
+  router.push(redirect || { name: 'index' })
 }
 
-// Navigate to register page
 const goToRegister = () => {
-  // If you have a route, use router.push; otherwise use window.location
-  window.location.href = "register.html"
+  router.push({ name: 'register' })
 }
 </script>
+
+<style scoped>
+/* สไตล์ของหน้า login ตามต้องการ */
+</style>
