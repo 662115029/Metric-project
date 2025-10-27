@@ -7,7 +7,7 @@
         <input type="password" v-model="password" id="loginPassword" placeholder="Password" required />
         <button type="submit">Login</button>
         <button type="button" @click="goToRegister" id="goToRegister">Register</button>
-        <RouterLink class="forgot-link" :to="{ name: 'register' }">Forgot email/password?</RouterLink>
+        <RouterLink class="forgot-link" :to="{ name: 'forgot-link' }">Forgot email/password?</RouterLink>
       </form>
     </div>
   </div>

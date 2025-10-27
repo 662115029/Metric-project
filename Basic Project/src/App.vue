@@ -13,6 +13,6 @@ import NavbarView from '@/components/Navbar.vue'
 
 const route = useRoute()
 const showNavbar = computed(() => {
-  return !['login', 'register', 'adminlogin'].includes(route.name)
+  return !['login', 'register', 'adminlogin', 'forgot-link'].includes(route.name)
 })
 </script>
