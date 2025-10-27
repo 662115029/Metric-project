@@ -3,22 +3,22 @@
     <!-- Navbar -->
     <div id="navbar-container"></div>
 
-    <div class="container">
-      <h1>Your Shopping Cart</h1>
-      <div class="cart-container">
+    <div class="max-w-6xl mx-auto px-5 py-5">
+      <h1 class="text-5xl mb-8">Your Shopping Cart</h1>
+      <div class="md:flex md:gap-5">
         <!-- Cart Items -->
-        <div class="cart-main">
+        <div class="md:flex-[3]">
           <div
             v-for="item in cartItems"
             :key="item.id"
-            class="cart-item"
+            class="bg-neutral-800 mb-5 p-5 rounded flex items-center"
           >
-            <img :src="item.image" alt="Game" class="item-image" />
-            <div class="item-details">
-              <h3>{{ item.name }}</h3>
-              <p>{{ item.description }}</p>
+            <img :src="item.image" alt="Game" class="w-30 h-30 mr-5 object-cover" />
+            <div class="flex-grow">
+              <h3 class="text-xl font-semibold">{{ item.name }}</h3>
+              <p class="my-1 text-neutral-400">{{ item.description }}</p>
             </div>
-            <div class="item-price">${{ item.price.toFixed(2) }}</div>
+            <div class="text-2xl font-bold ml-auto text-right">${{ item.price.toFixed(2) }}</div>
           </div>
 
           <div v-if="!cartItems.length" class="text-center">
@@ -27,34 +27,34 @@
         </div>
 
         <!-- Payment Methods -->
-        <div class="cart-sidebar">
-          <div class="payment-methods">
-            <div class="payment-method">
-              <img src="assets/images/mastercard.jfif" alt="Mastercard" />
+        <div class="md:flex-[1] mt-5 md:mt-0">
+          <div class="flex flex-wrap gap-2">
+            <div class="w-[48%] h-20 bg-white rounded flex justify-center items-center">
+              <img src="assets/images/mastercard.jfif" alt="Mastercard" class="max-w-[80%] max-h-[80%]" />
             </div>
-            <div class="payment-method">
-              <img src="assets/images/visa.png" alt="Visa" />
+            <div class="w-[48%] h-20 bg-white rounded flex justify-center items-center">
+              <img src="assets/images/visa.png" alt="Visa" class="max-w-[80%] max-h-[80%]" />
             </div>
-            <div class="payment-method">
-              <img src="assets/images/paypal.jfif" alt="PayPal" />
+            <div class="w-[48%] h-20 bg-white rounded flex justify-center items-center">
+              <img src="assets/images/paypal.jfif" alt="PayPal" class="max-w-[80%] max-h-[80%]" />
             </div>
-            <div class="payment-method">
-              <img src="assets/images/google_pay.jfif" alt="Google Pay" />
+            <div class="w-[48%] h-20 bg-white rounded flex justify-center items-center">
+              <img src="assets/images/google_pay.jfif" alt="Google Pay" class="max-w-[80%] max-h-[80%]" />
             </div>
           </div>
         </div>
       </div>
 
       <!-- Summary -->
-      <div class="cart-summary">
-        <div class="cart-total">
+      <div class="bg-neutral-800 p-5 rounded mb-5 mt-5">
+        <div class="text-2xl font-bold mb-2">
           Total: $<span>{{ totalPrice.toFixed(2) }}</span>
         </div>
-        <div class="tax-note">
+        <div class="text-neutral-400 mb-5">
           You may be taxed depending on which payment method selected
         </div>
-        <button class="button" @click="proceedToPayment">Continue To Payment</button>
-        <button class="button" @click="clearCart">Remove All Items</button>
+        <button class="bg-red-950 text-white border-none py-4 px-6 text-base cursor-pointer rounded mb-5 w-full hover:bg-red-900" @click="proceedToPayment">Continue To Payment</button>
+        <button class="bg-red-950 text-white border-none py-4 px-6 text-base cursor-pointer rounded mb-5 w-full hover:bg-red-900" @click="clearCart">Remove All Items</button>
       </div>
     </div>
   </div>
@@ -81,7 +81,7 @@ function proceedToPayment() {
   alert('Proceeding to payment...')
 }
 
-// Optional: Mount navbar JS if you’re still using your old navbar.js script
+// Optional: Mount navbar JS if you're still using your old navbar.js script
 onMounted(() => {
   if (window.loadNavbar) {
     window.loadNavbar()
@@ -96,111 +96,5 @@ body {
   color: white;
   margin: 0;
   padding: 0;
-}
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-h1 {
-  font-size: 42px;
-  margin-bottom: 30px;
-}
-.cart-item {
-  background-color: #2c2c2c;
-  margin-bottom: 20px;
-  padding: 20px;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-}
-.item-image {
-  width: 120px;
-  height: 120px;
-  margin-right: 20px;
-  object-fit: cover;
-}
-.item-details {
-  flex-grow: 1;
-}
-.item-details p {
-  margin: 5px 0;
-  color: #aaa;
-}
-.item-price {
-  font-size: 24px;
-  font-weight: bold;
-  margin-left: auto;
-  text-align: right;
-}
-.item-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-.action-link {
-  color: white;
-  text-decoration: underline;
-  margin-left: 10px;
-  cursor: pointer;
-}
-.button {
-  background-color: #4a1010;
-  color: white;
-  border: none;
-  padding: 15px 25px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  width: 100%;
-}
-.button:hover {
-  background-color: #691818;
-}
-.cart-summary {
-  background-color: #2c2c2c;
-  padding: 20px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-}
-.cart-total {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-.tax-note {
-  color: #aaa;
-  margin-bottom: 20px;
-}
-.payment-methods {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.payment-method {
-  width: 48%;
-  height: 80px;
-  background-color: white;
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.payment-method img {
-  max-width: 80%;
-  max-height: 80%;
-}
-@media (min-width: 768px) {
-  .cart-container {
-    display: flex;
-    gap: 20px;
-  }
-  .cart-main {
-    flex: 3;
-  }
-  .cart-sidebar {
-    flex: 1;
-  }
 }
 </style>

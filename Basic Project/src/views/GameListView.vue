@@ -1,14 +1,3 @@
-<!--
-**********************************************************************************
-THIS PAGE MUST INCLUDE:
-**********************************************************************************
- - A list of all products from all categories!
- - One page limits the display of products up to 15 products! Use DOM events to 
-   manage pagination of products!
- - Products displayed must have original and promotional price visible at ALL
-   TIMES and on EVERY PAGE!
-**********************************************************************************
--->
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";

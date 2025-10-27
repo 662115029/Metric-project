@@ -13,84 +13,113 @@ THIS PAGE MUST INCLUDE:
     <!-- Navbar -->
     <div id="navbar-container"></div>
 
-    <div class="container">
-      <h2 style="color: white;">Contact Us</h2>
-      <p style="color: white;">
+    <div class="max-w-6xl mx-auto px-5 py-5">
+      <h2 class="text-white text-3xl m-0 mb-4">Contact Us</h2>
+      <p class="text-white mb-8">
         We'd love to hear from you! Use the form below to get in touch or visit us at our store.
       </p>
 
-      <div class="contact-grid">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
         <!-- Contact Info -->
-        <div class="contact-info">
-          <h3>Store Address</h3>
-          <div class="info-item">
-            <i class="fas fa-map-marker-alt"></i>
-            <p>
+        <div class="bg-white p-8 rounded-lg shadow-md">
+          <h3 class="text-xl font-bold mb-6 text-gray-800">Store Address</h3>
+          
+          <div class="mb-5 flex items-start">
+            <i class="fas fa-map-marker-alt mr-2.5 text-blue-500"></i>
+            <p class="text-gray-700">
               1201 Mason St<br />
               Gaming District<br />
               San Francisco, CA 94108
             </p>
           </div>
 
-          <div class="info-item">
-            <i class="fas fa-phone"></i>
-            <p>(830) 476-5664</p>
+          <div class="mb-5 flex items-start">
+            <i class="fas fa-phone mr-2.5 text-blue-500"></i>
+            <p class="text-gray-700">(830) 476-5664</p>
           </div>
 
-          <div class="info-item">
-            <i class="fas fa-envelope"></i>
-            <p>support@gamestore.com</p>
+          <div class="mb-5 flex items-start">
+            <i class="fas fa-envelope mr-2.5 text-blue-500"></i>
+            <p class="text-gray-700">support@gamestore.com</p>
           </div>
 
-          <div class="info-item">
-            <i class="fas fa-clock"></i>
-            <p>
+          <div class="mb-5 flex items-start">
+            <i class="fas fa-clock mr-2.5 text-blue-500"></i>
+            <p class="text-gray-700">
               Monday - Friday: 9am - 4pm<br />
               Saturday: 1am - 4pm<br />
               Sunday: Closed
             </p>
           </div>
 
-          <div class="map-container">
-            <div id="map"></div>
+          <div class="h-[300px] mt-5 rounded-lg overflow-hidden">
+            <div id="map" class="h-full w-full"></div>
           </div>
         </div>
 
         <!-- Contact Form -->
-        <div class="contact-form">
-          <h3>Send us a message!</h3>
+        <div class="bg-white p-8 rounded-lg shadow-md">
+          <h3 class="text-xl font-bold mb-6 text-gray-800">Send us a message!</h3>
           <form @submit.prevent="handleSubmit">
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" id="name" v-model="form.name" required />
+            <div class="mb-5">
+              <label for="name" class="block mb-1 font-bold text-gray-700">Name</label>
+              <input 
+                type="text" 
+                id="name" 
+                v-model="form.name" 
+                required 
+                class="w-full p-2.5 border border-gray-300 rounded text-base text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
 
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" v-model="form.email" required />
+            <div class="mb-5">
+              <label for="email" class="block mb-1 font-bold text-gray-700">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                v-model="form.email" 
+                required 
+                class="w-full p-2.5 border border-gray-300 rounded text-base text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
 
-            <div class="form-group">
-              <label for="subject">Subject</label>
-              <input type="text" id="subject" v-model="form.subject" required />
+            <div class="mb-5">
+              <label for="subject" class="block mb-1 font-bold text-gray-700">Subject</label>
+              <input 
+                type="text" 
+                id="subject" 
+                v-model="form.subject" 
+                required 
+                class="w-full p-2.5 border border-gray-300 rounded text-base text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
 
-            <div class="form-group">
-              <label for="message">Message</label>
-              <textarea id="message" v-model="form.message" required></textarea>
+            <div class="mb-5">
+              <label for="message" class="block mb-1 font-bold text-gray-700">Message</label>
+              <textarea 
+                id="message" 
+                v-model="form.message" 
+                required 
+                class="w-full p-2.5 border border-gray-300 rounded text-base h-[150px] resize-y text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></textarea>
             </div>
 
-            <button type="submit">Send Message</button>
+            <button 
+              type="submit" 
+              class="bg-blue-500 text-white border-none py-3 px-5 rounded cursor-pointer text-base transition-colors duration-300 hover:bg-blue-600"
+            >
+              Send Message
+            </button>
 
             <div
-              class="success-message"
+              class="text-green-600 font-bold mt-4 block"
               v-show="successMessage"
             >
               {{ successMessage }}
             </div>
 
             <div
-              class="error-message"
+              class="text-red-600 font-bold mt-4 block"
               v-show="errorMessage"
             >
               {{ errorMessage }}
@@ -165,106 +194,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Keep all original CSS */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   color: #333;
-}
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-header {
-  background-color: #2c3e50;
-  color: white;
-  padding: 20px 0;
-  text-align: center;
-}
-h1,
-h2 {
-  margin: 0;
-}
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  margin-top: 30px;
-}
-@media (max-width: 768px) {
-  .contact-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.contact-info,
-.contact-form {
-  background-color: white;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-.map-container {
-  height: 300px;
-  margin-top: 20px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-#map {
-  height: 100%;
-  width: 100%;
-}
-.info-item {
-  margin-bottom: 20px;
-}
-.info-item i {
-  margin-right: 10px;
-  color: #3498db;
-}
-.form-group {
-  margin-bottom: 20px;
-}
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-input,
-textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
-}
-textarea {
-  height: 150px;
-  resize: vertical;
-}
-button {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
-}
-button:hover {
-  background-color: #2980b9;
-}
-.success-message {
-  color: #27ae60;
-  font-weight: bold;
-  margin-top: 15px;
-  display: block;
-}
-.error-message {
-  color: #e74c3c;
-  font-weight: bold;
-  margin-top: 15px;
-  display: block;
 }
 </style>

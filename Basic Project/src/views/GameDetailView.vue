@@ -16,56 +16,56 @@ THIS PAGE MUST INCLUDE:
     <!-- Navbar (replace with your Navbar component if you have one) -->
     <div id="navbar-container"></div>
 
-    <div class="container">
-      <div class="game-content">
-        <div class="game-image-container">
+    <div class="max-w-6xl mx-auto px-5 py-2.5">
+      <div class="flex flex-wrap gap-5 mt-5">
+        <div class="flex-[0_0_100%] max-w-[600px] bg-gradient-to-b from-neutral-800 via-red-950 to-[#250101] rounded-2xl overflow-hidden p-4">
           <img
             v-if="game"
-            class="game-image"
+            class="w-full h-auto rounded"
             :src="game.thumbnail"
             :alt="game.title"
           />
         </div>
 
-        <div class="game-details" v-if="game">
-          <h2 class="game-title">{{ game.title }}</h2>
-          <div class="game-meta">
-            <span>Developer: {{ game.developer || 'Unknown' }}</span>
-            <span>Released: {{ formattedReleaseDate }}</span>
+        <div class="flex-1 min-w-[300px] bg-gradient-to-b from-neutral-800 via-red-950 to-[#250101] rounded-2xl p-4" v-if="game">
+          <h2 class="text-2xl font-bold m-0 mb-4">{{ game.title }}</h2>
+          <div class="mb-4">
+            <span class="mr-4 text-neutral-300 text-sm">Developer: {{ game.developer || 'Unknown' }}</span>
+            <span class="mr-4 text-neutral-300 text-sm">Released: {{ formattedReleaseDate }}</span>
           </div>
-          <div class="game-description" v-html="game.description || 'No description available.'"></div>
-          <div class="game-tags">
-            <div class="game-tag" v-for="tag in tags" :key="tag">{{ tag }}</div>
+          <div class="leading-relaxed mb-5" v-html="game.description || 'No description available.'"></div>
+          <div class="flex flex-wrap gap-2.5 my-5">
+            <div class="bg-neutral-700 text-white px-2.5 py-1 rounded text-sm flex items-center before:content-['✓'] before:mr-1 before:text-white" v-for="tag in tags" :key="tag">{{ tag }}</div>
           </div>
         </div>
       </div>
 
-      <div class="purchase-section" v-if="game">
-        <h3 class="purchase-title">Add Game to Cart</h3>
-        <div class="price-container">
+      <div class="mt-5 bg-gradient-to-t from-neutral-800 via-red-950 to-[#250101] rounded-2xl p-4" v-if="game">
+        <h3 class="text-lg mb-4">Add Game to Cart</h3>
+        <div class="mb-4">
           <span
             v-if="showDiscount"
-            class="discount-badge"
+            class="bg-red-700 text-white px-2 py-1 rounded text-sm font-bold inline-block mr-2.5"
           >-{{ discountPercent }}%</span>
           <span
             v-if="showDiscount"
-            class="original-price"
+            class="text-base text-neutral-400 line-through mr-2.5"
           >${{ price.toFixed(2) }}</span>
-          <span class="current-price">${{ promoPrice.toFixed(2) }}</span>
+          <span class="text-2xl font-bold text-white">${{ promoPrice.toFixed(2) }}</span>
         </div>
-        <div class="platform-tags">
-          <div class="platform-tag">Java</div>
+        <div class="flex gap-4 mt-4">
+          <div class="bg-neutral-700 text-white px-2.5 py-1 rounded text-sm flex items-center before:content-['✓'] before:mr-1 before:text-white">Java</div>
         </div>
-        <div class="quantity-selector">
-          <label for="quantity">Quantity:</label>
-          <select id="quantity" v-model.number="quantity">
+        <div class="mb-4 mt-4">
+          <label for="quantity" class="mr-2.5">Quantity:</label>
+          <select id="quantity" v-model.number="quantity" class="p-2 bg-neutral-700 text-white border border-neutral-600 rounded">
             <option v-for="n in 10" :key="n" :value="n">{{ n }}</option>
           </select>
         </div>
-        <button class="add-to-cart-btn" @click="addToCart">Add to Cart</button>
+        <button class="bg-red-600 text-white px-5 py-2.5 border-none rounded text-base cursor-pointer transition-colors duration-200 w-full mb-2.5 hover:bg-red-700" @click="addToCart">Add to Cart</button>
       </div>
 
-      <div v-if="error" class="error" style="color: red; margin-top: 20px;">
+      <div v-if="error" class="text-red-500 mt-5">
         {{ error }}
       </div>
     </div>
@@ -175,260 +175,11 @@ body {
     padding: 0;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 10px 20px;
-}
-
-.gamepage {
-    background-color: #700000; /* Dark red/maroon background */
-    border-radius: 4px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    color: #fff;
-    overflow: hidden;
-    padding: 20px;
-}
-
-.game-content {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.game-image-container {
-    flex: 0 0 100%;
-    max-width: 600px;
-    background: linear-gradient(to bottom, #2C2C2C 0%, #281616 100%, #250101 100%);
-    border-radius: 15px;
-    overflow: hidden;
-    padding: 15px;
-}
-
-.game-image {
-    width: 100%;
-    height: auto;
-    border-radius: 2px;
-}
-
-.game-details {
-    flex: 1;
-    min-width: 300px;
-    background: linear-gradient(to bottom, #2C2C2C 0%, #281616 100%, #250101 100%);
-    border-radius: 15px;
-    padding: 15px 20px;
-}
-
-.game-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0 0 15px 0;
-}
-
-.game-description {
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-.game-meta {
-    margin-bottom: 15px;
-}
-
-.game-meta span {
-    margin-right: 15px;
-    color: #ddd;
-    font-size: 14px;
-}
-
-.game-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 20px 0;
-}
-
-.game-tag {
-    background-color: #333;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-}
-
-.game-tag::before {
-    content: "✓";
-    margin-right: 5px;
-    color: white;
-}
-
-.purchase-section {
-    margin-top: 20px;
-    background: linear-gradient(to top, #2C2C2C 0%, #281616 100%, #250101 100%);
-    border-radius: 15px;
-    padding: 15px 20px;
-}
-
-.purchase-title {
-    font-size: 18px;
-    margin-bottom: 15px;
-}
-
-.price-container {
-    margin-bottom: 15px;
-}
-
-.current-price {
-    font-size: 22px;
-    font-weight: bold;
-    color: #fff;
-}
-
-.original-price {
-    font-size: 16px;
-    color: #999;
-    text-decoration: line-through;
-    margin-right: 10px;
-}
-
-.discount-badge {
-    background-color: #cc0000;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: bold;
-    display: inline-block;
-    margin-right: 10px;
-}
-
-.quantity-selector {
-    margin-bottom: 15px;
-}
-
-.quantity-selector label {
-    margin-right: 10px;
-}
-
-.quantity-selector select {
-    padding: 8px;
-    background-color: #333;
-    color: #fff;
-    border: 1px solid #444;
-    border-radius: 4px;
-}
-
-.add-to-cart-btn {
-    background-color: #ff3333;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.add-to-cart-btn:hover {
-    background-color: #e60000;
-}
-
-/* Platform/feature tags */
-.platform-tags {
-    display: flex;
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.platform-tag {
-    background-color: #333;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-}
-
-.platform-tag::before {
-    content: "✓";
-    margin-right: 5px;
-    color: white;
-}
-
-/* Navigation */
-.game-navigation {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #222;
-    padding: 10px 15px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-}
-
-.nav-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.nav-button {
-    background-color: #333;
-    border: none;
-    color: #fff;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.nav-button:hover {
-    background-color: #444;
-}
-
-.nav-dropdown {
-    position: relative;
-}
-
-.nav-dropdown select {
-    background-color: #ffffff;
-    color: #000;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.user-section {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.user-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: #555;
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .game-content {
-        flex-direction: column;
-    }
-    
-    .game-image-container,
-    .game-details {
+    .flex-wrap > div {
         flex: 0 0 100%;
         max-width: 100%;
-    }
-    
-    .nav-buttons {
-        flex-wrap: wrap;
     }
 }
 </style>
