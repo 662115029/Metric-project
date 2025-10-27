@@ -3,93 +3,107 @@
     <!-- Optional: If you already integrated AdminNavbar.vue, import and use it here -->
     <!-- <AdminNavbar /> -->
 
-    <div class="main-container">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 p-4">
       <!-- Left Column -->
-      <div class="left-column">
-        <h2 class="column-title">Category Management</h2>
-        <div class="links-container">
-          <div class="link-item">
+      <div>
+        <h2 class="m-0 mb-3 text-xl font-bold">Category Management</h2>
+        <div class="grid gap-3">
+          <div>
             <Anchor :to="links.category.add">
-              <h3>Add a New Category</h3>
-              <p>Create a new game category for the store</p>
+              <div class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] text-[#111] no-underline hover:opacity-90 transition-opacity">
+                <h3 class="m-0 mb-1 font-semibold">Add a New Category</h3>
+                <p class="m-0 text-sm text-gray-700">Create a new game category for the store</p>
+              </div>
             </Anchor>
           </div>
-          <div class="link-item">
+          <div>
             <Anchor :to="links.category.update">
-              <h3>Update a Category</h3>
-              <p>Change or update category information</p>
+              <div class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] text-[#111] no-underline hover:opacity-90 transition-opacity">
+                <h3 class="m-0 mb-1 font-semibold">Update a Category</h3>
+                <p class="m-0 text-sm text-gray-700">Change or update category information</p>
+              </div>
             </Anchor>
           </div>
         </div>
       </div>
 
       <!-- Right Column -->
-      <div class="right-column">
-        <h2 class="column-title">Category List</h2>
+      <div>
+        <h2 class="m-0 mb-3 text-xl font-bold">Category List</h2>
 
-        <div class="search-bar-container">
+        <div class="mb-3">
           <input
             type="search"
             id="search-bar"
             v-model.trim="query"
             placeholder="Search for a category..."
             @input="onSearch"
+            class="w-full py-2.5 px-3 rounded-lg border border-gray-300 box-border focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <!-- Categories -->
-        <div class="categories" v-show="!showingGames">
+        <div v-show="!showingGames">
           <div
             v-if="isLoading && !categories.length"
-            class="loading"
+            class="text-gray-600 p-3"
           >Loading categories…</div>
 
-          <div v-else-if="!filteredCategories.length" class="empty">No categories</div>
+          <div v-else-if="!filteredCategories.length" class="text-gray-600 p-3">No categories</div>
 
           <div
             v-else
-            class="category-list"
+            class="grid gap-2.5"
           >
             <button
               v-for="cat in filteredCategories"
               :key="cat.id"
-              class="category-item"
+              class="text-left bg-white border border-gray-300 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors"
               @click="openCategory(cat)"
             >
-              <div class="name">{{ cat.name }}</div>
-              <small v-if="cat.description" class="desc">{{ cat.description }}</small>
+              <div class="font-bold">{{ cat.name }}</div>
+              <small v-if="cat.description" class="text-gray-600">{{ cat.description }}</small>
             </button>
           </div>
         </div>
 
         <!-- Games under a Category -->
-        <div class="games-container" v-show="showingGames">
-          <button class="back" @click="showCategories">Back to Categories</button>
-          <h3 class="games-title">{{ activeCategory?.name }} · Games</h3>
+        <div v-show="showingGames">
+          <button 
+            class="mb-3 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors cursor-pointer border-none" 
+            @click="showCategories"
+          >
+            Back to Categories
+          </button>
+          <h3 class="my-1.5 mb-3.5 text-lg font-semibold">{{ activeCategory?.name }} · Games</h3>
 
-          <div v-if="isLoadingGames" class="loading">Loading games…</div>
-          <div v-else-if="!games.length" class="empty">No games in this category</div>
+          <div v-if="isLoadingGames" class="text-gray-600 p-3">Loading games…</div>
+          <div v-else-if="!games.length" class="text-gray-600 p-3">No games in this category</div>
 
-          <div class="games-list" v-else>
-            <article v-for="g in games" :key="g.id" class="game-card">
+          <div class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3" v-else>
+            <article 
+              v-for="g in games" 
+              :key="g.id" 
+              class="grid grid-cols-[96px_1fr] gap-2.5 bg-white border border-gray-300 rounded-lg p-2.5"
+            >
               <img
                 v-if="g.thumbnailUrl || g.thumbnail"
-                class="thumb"
+                class="w-full h-full object-cover rounded-lg"
                 :src="g.thumbnailUrl || g.thumbnail"
                 alt="thumbnail"
                 loading="lazy"
               />
-              <div class="meta">
-                <h4 class="title">{{ g.title }}</h4>
-                <div class="price-row">
-                  <span class="price" v-if="g.promo_price && Number(g.promo_price) > 0">
+              <div>
+                <h4 class="m-0 mb-1.5 font-semibold text-sm">{{ g.title }}</h4>
+                <div class="flex gap-2 items-baseline mb-1">
+                  <span class="font-bold text-green-600" v-if="g.promo_price && Number(g.promo_price) > 0">
                     ${{ Number(g.promo_price).toFixed(2) }}
                   </span>
-                  <span :class="{ strike: g.promo_price && Number(g.promo_price) > 0 }">
+                  <span :class="{ 'line-through text-gray-500': g.promo_price && Number(g.promo_price) > 0 }">
                     ${{ Number(g.price || 0).toFixed(2) }}
                   </span>
                 </div>
-                <p class="desc" v-if="g.description">{{ g.description }}</p>
+                <p class="text-xs text-gray-600 m-0 line-clamp-2" v-if="g.description">{{ g.description }}</p>
               </div>
             </article>
           </div>
@@ -205,94 +219,3 @@ async function openCategory(cat) {
 
 onMounted(loadCategories)
 </script>
-
-<style scoped>
-/* You can also import your ./assets/css/admin-styles.css globally in main.css */
-
-.main-container {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 24px;
-  padding: 16px;
-}
-
-.left-column .column-title,
-.right-column .column-title {
-  margin: 0 0 12px;
-}
-
-.links-container {
-  display: grid;
-  gap: 12px;
-}
-
-.link-item a {
-  display: block;
-  padding: 14px 16px;
-  border-radius: 12px;
-  background: linear-gradient(to bottom, #ddd 30%, #281616 100%);
-  color: #111;
-  text-decoration: none;
-}
-
-.link-item a:hover { opacity: 0.92; }
-
-/* Right column */
-.search-bar-container { margin-bottom: 12px; }
-#search-bar {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-
-.category-list { display: grid; gap: 10px; }
-.category-item {
-  text-align: left;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 12px;
-  cursor: pointer;
-}
-.category-item:hover { background: #f7f7f7; }
-.category-item .name { font-weight: 700; }
-.category-item .desc { color: #555; }
-
-.games-container .back {
-  margin-bottom: 12px;
-}
-
-.games-title { margin: 6px 0 14px; }
-
-.games-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 12px;
-}
-.game-card {
-  display: grid;
-  grid-template-columns: 96px 1fr;
-  gap: 10px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 10px;
-}
-.game-card .thumb {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-}
-.game-card .meta .title { margin: 0 0 6px; }
-.price-row { display: flex; gap: 8px; align-items: baseline; }
-.price-row .strike { text-decoration: line-through; color: #777; }
-
-.loading, .empty { color: #555; padding: 12px; }
-
-@media (max-width: 900px) {
-  .main-container { grid-template-columns: 1fr; }
-}
-</style>

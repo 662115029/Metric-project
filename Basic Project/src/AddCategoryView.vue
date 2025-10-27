@@ -1,41 +1,63 @@
 <template>
-  <div class="admin-container">
-    <h1>Enter New Category Information</h1>
+  <div class="flex justify-center items-center min-h-screen bg-[#250101] p-5">
+    <div class="bg-gradient-to-b from-[#ddd] from-30% to-[#281616] p-5 rounded-xl shadow-lg text-center w-full max-w-md flex flex-col items-center gap-5 min-h-[500px]">
+      <h1 class="text-3xl mb-4 text-black">Enter New Category Information</h1>
 
-    <form @submit.prevent="onSubmit" id="categoryForm">
-      <label>
-        Category Name:
-        <input type="text" v-model.trim="categoryName" required />
-      </label>
+      <form @submit.prevent="onSubmit" class="flex flex-col items-center w-full gap-2.5 text-center">
+        <label class="text-base w-full max-w-[250px] inline-block text-left text-black">
+          Category Name:
+          <input 
+            type="text" 
+            v-model.trim="categoryName" 
+            required 
+            class="p-2 text-base border border-gray-300 rounded w-full max-w-[450px] box-border text-black mt-1"
+          />
+        </label>
 
-      <div
-        class="upload-box"
-        id="dropZone"
-        @click="openFilePicker"
-        @dragover.prevent
-        @dragenter.prevent
-        @drop.prevent="onDrop"
-      >
-        <p>Drag & Drop an image or click to upload</p>
-        <input
-          ref="fileInput"
-          type="file"
-          id="categoryIcon"
-          accept="image/*"
-          hidden
-          @change="onFileChange"
+        <div
+          class="bg-white p-8 rounded-xl text-center cursor-pointer w-auto max-w-[240px] my-5"
+          id="dropZone"
+          @click="openFilePicker"
+          @dragover.prevent
+          @dragenter.prevent
+          @drop.prevent="onDrop"
+        >
+          <p class="text-black">Drag & Drop an image or click to upload</p>
+          <input
+            ref="fileInput"
+            type="file"
+            id="categoryIcon"
+            accept="image/*"
+            hidden
+            @change="onFileChange"
+          />
+        </div>
+
+        <img 
+          v-if="previewUrl" 
+          :src="previewUrl" 
+          id="previewImage" 
+          alt="Preview" 
+          class="mt-2.5 max-w-full rounded"
         />
-      </div>
 
-      <img v-if="previewUrl" :src="previewUrl" id="previewImage" alt="Preview" />
+        <button 
+          type="submit" 
+          :disabled="isSubmitting"
+          class="bg-white py-2.5 px-4 text-lg rounded border-none cursor-pointer transition-colors duration-300 text-black hover:bg-[#d1d1d1] disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {{ isSubmitting ? 'Adding…' : 'Add Category' }}
+        </button>
 
-      <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? 'Adding…' : 'Add Category' }}
-      </button>
-
-      <!-- If you use Vue Router, replace with <RouterLink> -->
-      <a href="./category-management.html">Return to action selection</a>
-    </form>
+        <!-- If you use Vue Router, replace with <RouterLink> -->
+        <a 
+          href="./category-management.html"
+          class="bg-white py-2.5 px-4 text-lg rounded border-none cursor-pointer transition-colors duration-300 no-underline text-black hover:bg-[#d1d1d1]"
+        >
+          Return to action selection
+        </a>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -139,106 +161,6 @@ onBeforeUnmount(() => {
 body {
   color: black;
   background-color: #250101;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  padding: 20px;
   font-family: 'Gill Sans', Calibri, sans-serif;
-}
-
-.admin-container {
-  background: linear-gradient(to bottom, #ddd 30%, #281616 100%);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  box-sizing: border-box;
-  min-height: 500px; /* Increased height */
-}
-
-h1 {
-  font-size: 28px;
-  margin-bottom: 15px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  gap: 10px;
-  text-align: center; /* Centering the input and label elements */
-}
-
-label {
-  font-size: 16px;
-  width: 100%;
-  max-width: 250px;
-  display: inline-block; /* Ensure label takes up full width */
-  text-align: left; /* Align the label text to the left */
-}
-
-input,
-textarea {
-  padding: 8px 12px; /* Reduced padding */
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%; /* Full width */
-  max-width: 450px; /* Consistent */
-  box-sizing: border-box; /* Includes padding */
-}
-
-textarea {
-  height: 80px;
-  resize: none;
-}
-
-.upload-box {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  text-align: center;
-  cursor: pointer;
-  width: auto;
-  max-width: 240px; /* Same as input width */
-  margin: 20px 0;
-}
-
-#previewImage {
-  margin-top: 10px;
-  max-width: 100%;
-  border-radius: 5px;
-}
-
-button,
-a {
-  background-color: white;
-  padding: 10px 15px;
-  font-size: 18px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-decoration: none;
-  color: black;
-}
-
-button:hover {
-  background-color: #d1d1d1;
-}
-
-@media (max-width: 600px) {
-  .admin-container {
-    max-width: 90%;
-  }
 }
 </style>
