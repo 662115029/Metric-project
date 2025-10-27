@@ -1,60 +1,55 @@
-<!--
-**********************************************************************************
-THIS PAGE MUST INCLUDE:
-**********************************************************************************
- - A PRODUCT LIST of the products only from the selected category, or from the 
-   search!
- - A redirection to the product's page after selecting it from the PRODUCT LIST!
- - Products displayed must have original and promotional price visible at ALL
-   TIMES and on EVERY PAGE!
-**********************************************************************************
--->
 <template>
   <div>
     <!-- Navbar -->
     <div id="navbar-container"></div>
 
     <!-- Search Bar -->
-    <div class="search-bar-container">
+    <div class="text-center my-5">
       <input
         type="text"
         v-model="searchQuery"
         placeholder="Search..."
-        class="search-bar"
+        class="p-2.5 w-4/5 max-w-md rounded border-0"
       />
     </div>
 
     <!-- Categories -->
-    <div v-if="!showGames" class="categories">
+    <div v-if="!showGames" class="flex flex-wrap justify-center">
       <div
         v-for="category in filteredCategories"
         :key="category.id"
-        class="game-item"
+        class="flex flex-col bg-gradient-to-b from-[#2C2C2C] via-[#281616] to-[#250101] rounded-lg overflow-hidden shadow-lg transition-all duration-300 ease-in-out cursor-pointer m-4 p-2.5 text-center hover:-translate-y-1 hover:shadow-2xl"
         @click="selectCategory(category)"
       >
-        <img :src="category.image" alt="Category" class="game-image" />
-        <div class="game-title">{{ category.name }}</div>
+        <img :src="category.image" alt="Category" class="w-full h-[200px] object-cover border-b-2 border-[#444]" />
+        <div class="text-xl font-bold my-2.5 text-white text-center">{{ category.name }}</div>
       </div>
     </div>
 
     <!-- Games List -->
-    <div v-else class="games-container">
-      <button id="back-to-categories" @click="showCategories">Back to Categories</button>
-      <div id="games-list" class="flex flex-wrap justify-center">
+    <div v-else class="flex flex-wrap justify-center">
+      <button 
+        id="back-to-categories" 
+        @click="showCategories"
+        class="bg-[#4a1010] text-white border-0 py-2.5 px-5 text-base cursor-pointer rounded my-5 mx-auto block hover:bg-[#691818]"
+      >
+        Back to Categories
+      </button>
+      <div id="games-list" class="flex flex-wrap justify-center w-full">
         <div
           v-for="game in selectedCategory.games"
           :key="game.id"
-          class="game-item"
+          class="flex flex-col bg-gradient-to-b from-[#2C2C2C] via-[#281616] to-[#250101] rounded-lg overflow-hidden shadow-lg transition-all duration-300 ease-in-out cursor-pointer m-4 p-2.5 text-center hover:-translate-y-1 hover:shadow-2xl"
         >
-          <img :src="game.image" alt="Game" class="game-image" />
-          <div class="game-title">{{ game.title }}</div>
-          <div class="game-price">
+          <img :src="game.image" alt="Game" class="w-full h-[200px] object-cover border-b-2 border-[#444]" />
+          <div class="text-xl font-bold my-2.5 text-white text-center">{{ game.title }}</div>
+          <div class="text-base text-white">
             <template v-if="game.promoPrice">
-              <del>${{ game.originalPrice.toFixed(2) }}</del>
-              <span class="promo-price">${{ game.promoPrice.toFixed(2) }}</span>
+              <del class="text-[#ff6b6b] mr-1">${{ game.originalPrice.toFixed(2) }}</del>
+              <span class="text-[#45a049] font-bold">${{ game.promoPrice.toFixed(2) }}</span>
             </template>
             <template v-else>
-              <span class="normal-price">${{ game.price.toFixed(2) }}</span>
+              <span class="text-white font-bold">${{ game.price.toFixed(2) }}</span>
             </template>
           </div>
         </div>
@@ -62,6 +57,7 @@ THIS PAGE MUST INCLUDE:
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
@@ -114,100 +110,3 @@ onMounted(() => {
   }
 })
 </script>
-
-<style scoped>
-/* Game Item Styling */
-.game-item {
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient(to bottom, #2C2C2C 0%, #281616 100%, #250101 100%);
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  margin: 15px;
-  padding: 10px;
-  text-align: center;
-}
-
-.game-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-/* Game Image Styling */
-.game-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-bottom: 2px solid #444;
-}
-
-/* Game Title Styling */
-.game-title {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin: 10px 0;
-  color: #fff;
-  text-align: center;
-}
-
-/* Game Price Styling */
-.game-price {
-  font-size: 1em;
-  color: #fff;
-}
-
-.game-price del {
-  color: #ff6b6b;
-  margin-right: 5px;
-}
-
-.promo-price {
-  color: #45a049;
-  font-weight: bold;
-}
-
-.normal-price {
-  color: #fff;
-  font-weight: bold;
-}
-
-/* Extra Layout Styling */
-.categories,
-.games-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.search-bar-container {
-  text-align: center;
-  margin: 20px;
-}
-
-.search-bar {
-  padding: 10px;
-  width: 80%;
-  max-width: 400px;
-  border-radius: 5px;
-  border: none;
-}
-
-#back-to-categories {
-  background-color: #4a1010;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-  margin: 20px auto;
-  display: block;
-}
-
-#back-to-categories:hover {
-  background-color: #691818;
-}
-</style>
