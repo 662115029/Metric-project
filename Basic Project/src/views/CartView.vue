@@ -30,16 +30,16 @@
         <div class="md:flex-[1] mt-5 md:mt-0">
           <div class="flex flex-wrap gap-2">
             <div class="w-[48%] h-20 bg-white rounded flex justify-center items-center">
-              <img src="assets/images/mastercard.jfif" alt="Mastercard" class="max-w-[80%] max-h-[80%]" />
+              <img src="@/assets/images/mastercard.jpg" alt="Mastercard" class="max-w-[80%] max-h-[80%]" />
             </div>
             <div class="w-[48%] h-20 bg-white rounded flex justify-center items-center">
-              <img src="assets/images/visa.png" alt="Visa" class="max-w-[80%] max-h-[80%]" />
+              <img src="@/assets/images/visa.png" alt="Visa" class="max-w-[80%] max-h-[80%]" />
             </div>
             <div class="w-[48%] h-20 bg-white rounded flex justify-center items-center">
-              <img src="assets/images/paypal.jfif" alt="PayPal" class="max-w-[80%] max-h-[80%]" />
+              <img src="@/assets/images/paypal.jpg" alt="PayPal" class="max-w-[80%] max-h-[80%]" />
             </div>
             <div class="w-[48%] h-20 bg-white rounded flex justify-center items-center">
-              <img src="assets/images/google_pay.jfif" alt="Google Pay" class="max-w-[80%] max-h-[80%]" />
+              <img src="@/assets/images/google_pay.jpg" alt="Google Pay" class="max-w-[80%] max-h-[80%]" />
             </div>
           </div>
         </div>
