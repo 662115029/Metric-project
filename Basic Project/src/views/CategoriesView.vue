@@ -67,19 +67,19 @@ const categories = ref([
   {
     id: 1,
     name: 'Action',
-    image: 'assets/images/action.jpg',
+    image: new URL('@/assets/images/action.jpg', import.meta.url).href,
     games: [
-      { id: 101, title: 'Elden Ring', price: 59.99, image: 'assets/images/eldenring.jpg' },
-      { id: 102, title: 'God of War', promoPrice: 39.99, originalPrice: 49.99, image: 'assets/images/godofwar.jpg' },
+      { id: 101, title: 'Elden Ring', price: 59.99, image: new URL('@/assets/images/eldenring.jpg', import.meta.url).href },
+      { id: 102, title: 'God of War', promoPrice: 39.99, originalPrice: 49.99, image: new URL('@/assets/images/godofwar.jpg', import.meta.url).href },
     ],
   },
   {
     id: 2,
     name: 'Adventure',
-    image: 'assets/images/adventure.jpg',
+    image: new URL('@/assets/images/adventure.jpg', import.meta.url).href,
     games: [
-      { id: 201, title: 'Zelda: Breath of the Wild', price: 69.99, image: 'assets/images/zelda.jpg' },
-      { id: 202, title: 'Hollow Knight', price: 14.99, image: 'assets/images/hollowknight.jpg' },
+      { id: 201, title: 'Zelda: Breath of the Wild', price: 69.99, image: new URL('@/assets/images/zelda.jpg', import.meta.url).href },
+      { id: 202, title: 'Hollow Knight', price: 14.99, image: new URL('@/assets/images/hollowknight.jpg', import.meta.url).href },
     ],
   },
 ])
