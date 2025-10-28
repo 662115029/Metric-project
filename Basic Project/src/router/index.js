@@ -7,7 +7,7 @@ import GameListView from '@/views/GameListView.vue'
 import libraryView from '@/views/libraryView.vue'
 import HelpView from '@/views/HelpView.vue'
 import ForgotPasswordView from '@/views/ForgotPasswordView.vue'
-import AdminLoginView from '@/views/AdminLoginView.vue'
+import AdminLoginView from '@/adminviews/AdminLoginView.vue'
 
 const routes = [
   { path: '/', redirect: { name: 'login' } },
@@ -19,6 +19,7 @@ const routes = [
   { path: '/gamelist', name: 'gamelist', component: GameListView },
   { path: '/library', name: 'library', component: libraryView },
   { path: '/help', name: 'help', component: HelpView },
+  { path: '/forgot-link', name: 'forgot-link', component: ForgotPasswordView },
   { path: '/forgot-link', name: 'forgot-link', component: ForgotPasswordView },
 
   // --- admin ---
