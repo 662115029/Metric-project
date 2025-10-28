@@ -33,8 +33,9 @@
 
 <script setup>
 import { ref } from 'vue'
-// If you use Vue Router, uncomment and use it to navigate after login
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router' // ถ้าโปรเจกต์คุณใช้ router
+
+const router = useRouter()
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
 
@@ -44,7 +45,14 @@ const showPass = ref(false)
 const isSubmitting = ref(false)
 const error = ref('')
 
-// const router = useRouter()
+// รายชื่อ username พิเศษที่จะ bypass
+const SPECIAL_ADMIN_IDS = ['#root', '#admin', '9999']
+
+const isSpecialAdmin = (u) => {
+  if (!u) return false
+  const s = u.trim()
+  return SPECIAL_ADMIN_IDS.includes(s)
+}
 
 const onSubmit = async () => {
   error.value = ''
@@ -54,7 +62,30 @@ const onSubmit = async () => {
   }
 
   isSubmitting.value = true
+
   try {
+    // หากเป็นหนึ่งในไอดีพิเศษ -> ข้ามการเชื่อมต่อ backend (bypass)
+    if (isSpecialAdmin(username.value)) {
+      // สร้าง dummy token (อาจจะเป็น JWT ปลอมก็ได้) — อย่าใช้ใน production
+      const dummyToken = `admin-bypass:${username.value}:${Date.now()}`
+      localStorage.setItem('adminToken', dummyToken)
+      // เก็บ profile เบื้องต้นเพื่อใช้แสดงชื่อ
+      localStorage.setItem(
+        'adminProfile',
+        JSON.stringify({ username: username.value, displayName: 'Administrator (bypass)' })
+      )
+
+      // ไปยังแดชบอร์ดแอดมิน (ถ้าใช้ router)
+      try {
+        await router.push({ name: 'admindashboard' })
+      } catch (e) {
+        // fallback ถ้าไม่มี route หรือ push ล้มเหลว
+        window.location.href = '/admin/dashboard'
+      }
+      return
+    }
+
+    // ถ้าไม่ใช่ special id: สามารถเรียก API ปกติได้ (ตัวอย่าง)
     const res = await fetch(`${API_BASE}/api/admin/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -64,21 +95,15 @@ const onSubmit = async () => {
     const data = await res.json().catch(() => ({}))
     if (!res.ok) throw new Error(data.message || 'Login failed')
 
-    // Expect token from server response
     if (!data.token) throw new Error('No token returned from server')
 
     localStorage.setItem('adminToken', data.token)
-
-    // Optional: also store basic profile if returned
     if (data.admin) localStorage.setItem('adminProfile', JSON.stringify(data.admin))
 
-    // Navigate to admin dashboard or desired page
-    // await router.push({ name: 'AdminDashboard' })
-    // If you don't use router, you can do a plain redirect:
-    // window.location.href = '/admin/index.html'
-    alert('Login successful!')
+    // ไปแดชบอร์ด
+    await router.push({ name: 'admindashboard' })
   } catch (e) {
-    error.value = e.message
+    error.value = e.message || 'Login error'
   } finally {
     isSubmitting.value = false
   }

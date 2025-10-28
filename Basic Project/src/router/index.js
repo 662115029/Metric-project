@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import MainLayout from '@/components/layouts/MainLayout.vue'
+import AdminLayout from '@/components/layouts/AdminLayout.vue'
 import LoginView from '@/views/LoginView.vue'
 import IndexView from '@/views/IndexView.vue'
 import CategoriesView from '@/views/CategoriesView.vue'
@@ -8,22 +10,36 @@ import libraryView from '@/views/libraryView.vue'
 import HelpView from '@/views/HelpView.vue'
 import ForgotPasswordView from '@/views/ForgotPasswordView.vue'
 import AdminLoginView from '@/adminviews/AdminLoginView.vue'
+import DashboardView from '@/adminviews/DashboardView.vue'
 
 const routes = [
   { path: '/', redirect: { name: 'login' } },
   { path: '/login', name: 'login', component: LoginView },
-  { path: '/index', name: 'index', component: IndexView, meta: { requiresAuth: true } },
   { path: '/register', name: 'register', component: () => import('@/views/RegisterView.vue') },
-  { path: '/categories', name: 'categories', component: CategoriesView },
-  { path: '/cart', name: 'cart', component: CartView },
-  { path: '/gamelist', name: 'gamelist', component: GameListView },
-  { path: '/library', name: 'library', component: libraryView },
-  { path: '/help', name: 'help', component: HelpView },
   { path: '/forgot-link', name: 'forgot-link', component: ForgotPasswordView },
-  { path: '/forgot-link', name: 'forgot-link', component: ForgotPasswordView },
-
+  // --- User ---
+  {
+    path: '/',
+    component: MainLayout,
+    children: [
+      { path: '/index', name: 'index', component: IndexView, meta: { requiresAuth: true } },
+      { path: '/categories', name: 'categories', component: CategoriesView },
+      { path: '/cart', name: 'cart', component: CartView },
+      { path: '/gamelist', name: 'gamelist', component: GameListView },
+      { path: '/library', name: 'library', component: libraryView },
+      { path: '/help', name: 'help', component: HelpView },
+    ],
+  },
   // --- admin ---
   { path: '/admin/login', name: 'adminlogin', component: AdminLoginView },
+  {
+    path: '/admin',
+    component: AdminLayout, // Navbar แอดมินจะโชว์ให้ทุกหน้าภายใต้ /admin โดยอัตโนมัติ
+    meta: { requiresAdmin: true },
+    children: [
+      { path: 'dashboard', name: 'admindashboard', component: DashboardView },
+  ],
+  },
 ]
 
 const router = createRouter({

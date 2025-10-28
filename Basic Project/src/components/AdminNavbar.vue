@@ -99,32 +99,30 @@ function logoutAdmin() {
 </script>
 
 <script>
-// Lightweight anchor that supports either plain href or router-link API
+import { h } from 'vue'
+import { RouterLink } from 'vue-router'
+
 export default {
   components: {
+    // Lightweight anchor: string -> <a href="...">, object -> <RouterLink :to="...">
     Anchor: {
+      name: 'Anchor',
       props: { to: { type: [String, Object], required: true } },
-      inject: [],
-      render() {
-        // Simple implementation: if "to" is string -> <a>, else fallback to <a> with no router
-        if (typeof this.to === 'string') {
-          return (
-            <a href={this.to}>
-              {this.$slots.default?.()}
-            </a>
-          )
+      setup(props, { slots }) {
+        return () => {
+          const content = slots.default ? slots.default() : []
+          if (typeof props.to === 'string') {
+            return h('a', { href: props.to }, content)
+          }
+          // ถ้าใช้ router ให้ลิงก์ภายในเป็น RouterLink
+          return h(RouterLink, { to: props.to }, content)
         }
-        // If you use Vue Router, replace this component with <RouterLink>
-        return (
-          <a href="#">
-            {this.$slots.default?.()}
-          </a>
-        )
       },
     },
   },
 }
 </script>
+
 
 <style scoped>
 .navbar {
