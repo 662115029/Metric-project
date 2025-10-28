@@ -25,7 +25,7 @@ onMounted(() => {
 function goTo(where) {
   // map ให้ตรงกับชื่อ route ใน router ของคุณ
   const map = {
-    game: { name: 'GameManagement' },      // path: /admin/GameManagement
+    game: { name: 'GameManagement' },     
     category: { name: 'CategoryManagement' } 
   }
   router.push(map[where])

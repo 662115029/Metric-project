@@ -6,7 +6,7 @@
         <input type="text" v-model="username" id="loginUsername" placeholder="Username" required />
         <input type="password" v-model="password" id="loginPassword" placeholder="Password" required />
         <button type="submit">Login</button>
-        <button type="button" @click="goToRegister" id="goToRegister">Register</button>
+        <RouterLink :to="{ name: 'register' }" class="register inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Register </RouterLink>
         <RouterLink class="forgot-link" :to="{ name: 'forgot-link' }">Forgot email/password?</RouterLink>
       </form>
     </div>
