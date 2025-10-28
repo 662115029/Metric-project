@@ -6,26 +6,31 @@
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 p-4">
       <!-- Left Column -->
       <div>
-        <h2 class="m-0 mb-3 text-xl font-bold">Category Management</h2>
-        <div class="grid gap-3">
-          <div>
-            <Anchor :to="links.category.add">
-              <div class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] text-[#111] no-underline hover:opacity-90 transition-opacity">
-                <h3 class="m-0 mb-1 font-semibold">Add a New Category</h3>
-                <p class="m-0 text-sm text-gray-700">Create a new game category for the store</p>
-              </div>
-            </Anchor>
-          </div>
-          <div>
-            <Anchor :to="links.category.update">
-              <div class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] text-[#111] no-underline hover:opacity-90 transition-opacity">
-                <h3 class="m-0 mb-1 font-semibold">Update a Category</h3>
-                <p class="m-0 text-sm text-gray-700">Change or update category information</p>
-              </div>
-            </Anchor>
-          </div>
-        </div>
-      </div>
+  <h2 class="m-0 mb-3 text-xl font-bold">Category Management</h2>
+  <div class="grid gap-3">
+    <!-- ปุ่ม Add Category -->
+    <div>
+      <router-link
+        :to="{ name: 'AddCategory' }"
+        class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] text-[#111] no-underline hover:opacity-90 transition-opacity"
+      >
+        <h3 class="m-0 mb-1 font-semibold">Add a New Category</h3>
+        <p class="m-0 text-sm text-gray-700">Create a new game category for the store</p>
+      </router-link>
+    </div>
+
+    <!-- ปุ่ม Update Category -->
+    <div>
+      <router-link
+        :to="{ name: 'UpdateCategory' }"
+        class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] text-[#111] no-underline hover:opacity-90 transition-opacity"
+      >
+        <h3 class="m-0 mb-1 font-semibold">Update a Category</h3>
+        <p class="m-0 text-sm text-gray-700">Change or update category information</p>
+      </router-link>
+    </div>
+  </div>
+</div>
 
       <!-- Right Column -->
       <div>

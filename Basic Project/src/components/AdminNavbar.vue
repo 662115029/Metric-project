@@ -22,10 +22,10 @@
 
       <!-- Category Management -->
       <li class="dropdown" @mouseenter="hover('cat', true)" @mouseleave="hover('cat', false)">
-        <router-link :to="{ name: 'CategoryManagment' }">Category Management ▾</router-link>
+        <router-link :to="{ name: 'CategoryManagement' }">Category Management ▾</router-link>
         <ul class="dropdown-menu" :class="{ show: (isOpen && isMobile) || openDropdown === 'cat' }">
           <!-- ชื่อ route ตามที่ให้มาเป๊ะ ๆ -->
-          <li><router-link :to="{ name: 'AddCategoryView' }">Add Category</router-link></li>
+          <li><router-link :to="{ name: 'AddCategory' }">Add Category</router-link></li>
           <li><router-link :to="{ name: 'UpdateCategory' }">Update Category</router-link></li>
         </ul>
       </li>

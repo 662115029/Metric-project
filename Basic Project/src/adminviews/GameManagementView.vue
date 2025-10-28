@@ -6,26 +6,38 @@
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 p-4">
       <!-- Left Column -->
       <div>
-        <h2 class="m-0 mb-3 text-xl font-bold">Game Management</h2>
-        <div class="grid gap-3">
-          <div>
-            <Anchor :to="links.game.add">
-              <div class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] text-[#111] no-underline hover:opacity-90 transition-opacity">
-                <h3 class="m-0 mb-1 font-semibold">Add a New Game</h3>
-                <p class="m-0 text-sm text-gray-700">Create a new listing for a game and give it the proper tags to stand out.</p>
-              </div>
-            </Anchor>
-          </div>
-          <div>
-            <Anchor :to="links.game.update">
-              <div class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] text-[#111] no-underline hover:opacity-90 transition-opacity">
-                <h3 class="m-0 mb-1 font-semibold">Update Selected Game</h3>
-                <p class="m-0 text-sm text-gray-700">Change the listing for an existing game and update its information, media, or price.</p>
-              </div>
-            </Anchor>
-          </div>
-        </div>
-      </div>
+  <h2 class="m-0 mb-3 text-xl font-bold">Game Management</h2>
+  <div class="grid gap-3">
+    <!-- Add Game -->
+    <div>
+      <router-link
+        :to="{ name: 'AddGame' }"
+        class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] 
+               text-[#111] no-underline hover:opacity-90 transition-opacity"
+      >
+        <h3 class="m-0 mb-1 font-semibold">Add a New Game</h3>
+        <p class="m-0 text-sm text-gray-700">
+          Create a new listing for a game and give it the proper tags to stand out.
+        </p>
+      </router-link>
+    </div>
+
+    <!-- Update Game -->
+    <div>
+      <router-link
+        :to="{ name: 'UpdateGame' }"
+        class="block p-3.5 px-4 rounded-xl bg-gradient-to-b from-[#ddd] via-[#ddd] to-[#281616] 
+               text-[#111] no-underline hover:opacity-90 transition-opacity"
+      >
+        <h3 class="m-0 mb-1 font-semibold">Update Selected Game</h3>
+        <p class="m-0 text-sm text-gray-700">
+          Change the listing for an existing game and update its information, media, or price.
+        </p>
+      </router-link>
+    </div>
+  </div>
+</div>
+
 
       <!-- Right Column -->
       <div>

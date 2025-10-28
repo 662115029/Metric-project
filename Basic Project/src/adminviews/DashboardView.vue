@@ -26,7 +26,7 @@ function goTo(where) {
   // map ให้ตรงกับชื่อ route ใน router ของคุณ
   const map = {
     game: { name: 'GameManagement' },      // path: /admin/GameManagement
-    category: { name: 'CategoryManagment' } // path: /admin/CategoryManagment  (สะกดตามที่ให้มา)
+    category: { name: 'CategoryManagement' } 
   }
   router.push(map[where])
 }

@@ -13,7 +13,7 @@ import AdminLoginView from '@/adminviews/AdminLoginView.vue'
 import DashboardView from '@/adminviews/DashboardView.vue'
 import AddGameView from '@/adminviews/AddGameView.vue'
 import AddCategoryView from '@/adminviews/AddCategoryView.vue'
-import CategoryManagmentView from '@/adminviews/CategoryManagmentView.vue'
+import CategoryManagementView from '@/adminviews/CategoryManagementView.vue'
 import GameManagementView from '@/adminviews/GameManagementView.vue'
 import UpdateCategoryView from '@/adminviews/UpdateCategoryView.vue'
 import UpdateGameView from '@/adminviews/UpdateGameView.vue'
@@ -36,23 +36,24 @@ const routes = [
       { path: '/help', name: 'help', component: HelpView },
     ],
   },
-  // --- admin ---
-  { path: '/admin/login', name: 'adminlogin', component: AdminLoginView },
-  {
-    path: '/admin',
-    component: AdminLayout, // Navbar แอดมินจะโชว์ให้ทุกหน้าภายใต้ /admin โดยอัตโนมัติ
-    meta: { requiresAdmin: true },
-    children: [
-      { path: 'dashboard', name: 'admindashboard', component: DashboardView },
-      { path: 'GameManagement', name: 'GameManagement', component: GameManagementView },
-      { path: 'AddGame', name: 'AddGame', component: AddGameView },
-      { path: 'CategoryManagment', name: 'CategoryManagment', component: CategoryManagmentView },
-      { path: 'AddCategory', name: 'AddCategoryView', component: AddCategoryView },
-      { path: 'UpdateCategory', name: 'UpdateCategory', component: UpdateCategoryView },
-      { path: 'UpdateGameView', name: 'UpdateGame', component: UpdateGameView },
-    ],
-  },
+
+{ path: '/admin/login', name: 'adminlogin', component: AdminLoginView },
+{
+  path: '/admin/adminviews',
+  component: AdminLayout, // Navbar แอดมินจะโชว์ให้ทุกหน้าภายใต้ /admin/adminviews โดยอัตโนมัติ
+  meta: { requiresAdmin: true },
+  children: [
+    { path: 'dashboard', name: 'admindashboard', component: DashboardView },
+    { path: 'GameManagement', name: 'GameManagement', component: GameManagementView },
+    { path: 'AddGame', name: 'AddGame', component: AddGameView },
+    { path: 'CategoryManagement', name: 'CategoryManagement', component: CategoryManagementView },
+    { path: 'AddCategory', name: 'AddCategory', component: AddCategoryView },
+    { path: 'UpdateCategory', name: 'UpdateCategory', component: UpdateCategoryView },
+    { path: 'UpdateGame', name: 'UpdateGame', component: UpdateGameView },
+  ],
+},
 ]
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
