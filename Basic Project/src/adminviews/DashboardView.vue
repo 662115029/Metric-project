@@ -2,7 +2,6 @@
   <div class="admin-container">
     <h1>Admin Dashboard</h1>
     <div class="admin-buttons">
-      <!-- If using Vue Router, set USE_ROUTER = true below -->
       <button @click="goTo('game')">Game Management</button>
       <button @click="goTo('category')">Category Management</button>
       <button @click="logoutAdmin">Logout</button>
@@ -12,41 +11,30 @@
 
 <script setup>
 import { onMounted } from 'vue'
-// Toggle this if you use Vue Router
-const USE_ROUTER = false
-// import { useRouter } from 'vue-router'
-// const router = useRouter()
+import { useRouter } from 'vue-router'
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
+const router = useRouter()
 
 onMounted(() => {
   const token = localStorage.getItem('adminToken')
   if (!token) {
-    // If you use router: router.replace({ name: 'AdminLogin' })
-    window.location.href = '../admin-login.html'
+    router.replace({ name: 'adminlogin' })
   }
 })
 
 function goTo(where) {
-  if (USE_ROUTER) {
-    // Map to your route names/paths
-    // const map = { game: { name: 'GameManagement' }, category: { name: 'CategoryManagement' } }
-    // router.push(map[where])
-  } else {
-    const map = {
-      game: 'game-management.html',
-      category: 'category-management.html',
-    }
-    window.location.href = map[where]
+  // map ให้ตรงกับชื่อ route ใน router ของคุณ
+  const map = {
+    game: { name: 'GameManagement' },      // path: /admin/GameManagement
+    category: { name: 'CategoryManagment' } // path: /admin/CategoryManagment  (สะกดตามที่ให้มา)
   }
+  router.push(map[where])
 }
 
 function logoutAdmin() {
-  // Use the same keys across the app for consistency
   localStorage.removeItem('adminToken')
   localStorage.removeItem('adminProfile')
-  // If router is used: router.replace({ name: 'AdminLogin' })
-  window.location.href = '../admin-login.html'
+  router.replace({ name: 'adminlogin' })
 }
 </script>
 

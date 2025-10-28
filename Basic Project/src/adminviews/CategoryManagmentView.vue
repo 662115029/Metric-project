@@ -114,34 +114,39 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-// import AdminNavbar from '@/components/AdminNavbar.vue'
+import { ref, computed, onMounted, h } from 'vue'
+// import { RouterLink } from 'vue-router' // ถ้าในอนาคตจะเปิด router ให้ปลดคอมเมนต์
 
-// If you use Vue Router, set USE_ROUTER = true and turn Anchor into RouterLink
+// ถ้าใช้ Vue Router ให้เปลี่ยนเป็น true แล้วใช้ RouterLink
 const USE_ROUTER = false
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
+
+// ------------------------------
+// Lightweight Anchor component (no JSX)
+// ------------------------------
+const Anchor = {
+  name: 'Anchor',
+  props: { to: { type: [String, Object], required: true } },
+  setup(props, { slots }) {
+    return () => {
+      const children = slots.default ? slots.default() : []
+      if (typeof props.to === 'string') {
+        return h('a', { href: props.to }, children)
+      }
+      // ถ้าคุณเปิด router แล้วอยากให้รองรับ object เช่น { name: 'AddCategory' }
+      // if (USE_ROUTER && typeof props.to === 'object') {
+      //   return h(RouterLink, { to: props.to }, children)
+      // }
+      return h('a', { href: '#' }, children)
+    }
+  },
+}
+// ------------------------------
 
 const links = {
   category: {
     add: USE_ROUTER ? { name: 'AddCategory' } : './add-category.html',
     update: USE_ROUTER ? { name: 'UpdateCategory' } : './update-category.html',
-  },
-}
-
-// lightweight Anchor that supports string href immediately; swap with <RouterLink> if you use router
-const Anchor = {
-  props: { to: { type: [String, Object], required: true } },
-  render() {
-    if (typeof this.to === 'string') {
-      return (
-        <a href={this.to}>
-          {this.$slots.default?.()}
-        </a>
-      )
-    }
-    return (
-      <a href="#">{this.$slots.default?.()}</a>
-    )
   },
 }
 
@@ -165,9 +170,8 @@ const filteredCategories = computed(() => {
 
 let searchTimer
 const onSearch = () => {
-  // debounce UI search (client-side)
   clearTimeout(searchTimer)
-  searchTimer = setTimeout(() => {}, 150)
+  searchTimer = setTimeout(() => {}, 150) // debounce client-side search
 }
 
 async function loadCategories() {
@@ -196,17 +200,10 @@ async function openCategory(cat) {
   games.value = []
   isLoadingGames.value = true
   try {
-    // Adjust to your backend route; common patterns:
-    // 1) GET /api/categories/:id/games
-    // 2) GET /api/games?category_id=:id
     const url1 = `${API_BASE}/api/categories/${cat.id}/games`
     const url2 = `${API_BASE}/api/games?category_id=${encodeURIComponent(cat.id)}`
-
     let res = await fetch(url1)
-    if (!res.ok) {
-      // fallback to pattern 2
-      res = await fetch(url2)
-    }
+    if (!res.ok) res = await fetch(url2)
     const data = await res.json().catch(() => [])
     games.value = Array.isArray(data) ? data : (Array.isArray(data.games) ? data.games : [])
   } catch (e) {

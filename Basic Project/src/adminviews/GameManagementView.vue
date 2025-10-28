@@ -94,8 +94,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-// import AdminNavbar from '@/components/AdminNavbar.vue'
+import { ref, computed, onMounted, h } from 'vue'
+// import { RouterLink } from 'vue-router' // ถ้าจะให้รองรับ router object ก็ปลดคอมเมนต์และปรับด้านล่าง
 
 // Toggle router usage
 const USE_ROUTER = false
@@ -103,12 +103,22 @@ const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
 
 // Lightweight Anchor component; replace with <RouterLink> if using Vue Router
 const Anchor = {
+  name: 'Anchor',
   props: { to: { type: [String, Object], required: true } },
-  render() {
-    if (typeof this.to === 'string') {
-      return (<a href={this.to}>{this.$slots.default?.()}</a>)
+  setup(props, { slots }) {
+    return () => {
+      const children = slots.default ? slots.default() : []
+      // string -> <a href="...">
+      if (typeof props.to === 'string') {
+        return h('a', { href: props.to }, children)
+      }
+      // ถ้าต้องการรองรับ router object:
+      // if (USE_ROUTER && props.to && typeof props.to === 'object') {
+      //   return h(RouterLink, { to: props.to }, children)
+      // }
+      // fallback no-router
+      return h('a', { href: '#' }, children)
     }
-    return (<a href="#">{this.$slots.default?.()}</a>)
   },
 }
 
@@ -130,7 +140,8 @@ const categoryId = ref('')
 const filteredGames = computed(() => {
   const q = query.value.toLowerCase()
   return games.value.filter(g => {
-    const matchQ = !q ||
+    const matchQ =
+      !q ||
       String(g.title || '').toLowerCase().includes(q) ||
       String(g.developer || '').toLowerCase().includes(q) ||
       String(g.description || '').toLowerCase().includes(q)
@@ -163,9 +174,6 @@ async function loadCategories() {
 async function loadGames() {
   isLoading.value = true
   try {
-    // Try common endpoints
-    // 1) GET /api/games
-    // Optional: support server-side filter by category & q if backend supports
     let url = `${API_BASE}/api/games`
     const res = await fetch(url)
     const data = await res.json()
@@ -183,9 +191,13 @@ function formatDate(d) {
     const date = new Date(d)
     if (Number.isNaN(date.getTime())) return String(d)
     return date.toLocaleDateString(undefined, {
-      year: 'numeric', month: 'short', day: 'numeric',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     })
-  } catch { return String(d) }
+  } catch {
+    return String(d)
+  }
 }
 
 onMounted(async () => {

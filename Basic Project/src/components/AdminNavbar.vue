@@ -1,27 +1,32 @@
 <template>
   <nav class="navbar">
-    <button class="menu-toggle" id="mobile-menu" @click="isOpen = !isOpen" aria-label="Toggle navigation" aria-expanded="isOpen">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
+    <button
+      class="menu-toggle"
+      id="mobile-menu"
+      @click="isOpen = !isOpen"
+      aria-label="Toggle navigation"
+      :aria-expanded="isOpen"
+    >
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
     </button>
 
     <ul class="nav-links" :class="{ active: isOpen }">
       <!-- Game Management -->
       <li class="dropdown" @mouseenter="hover('game', true)" @mouseleave="hover('game', false)">
-        <Anchor :to="links.game.root">Game Management ▾</Anchor>
-        <ul class="dropdown-menu" :class="{ show: isOpen && isMobile || openDropdown === 'game' }">
-          <li><Anchor :to="links.game.add">Add Games</Anchor></li>
-          <li><Anchor :to="links.game.update">Update Games</Anchor></li>
+        <router-link :to="{ name: 'GameManagement' }">Game Management ▾</router-link>
+        <ul class="dropdown-menu" :class="{ show: (isOpen && isMobile) || openDropdown === 'game' }">
+          <li><router-link :to="{ name: 'AddGame' }">Add Games</router-link></li>
+          <li><router-link :to="{ name: 'UpdateGame' }">Update Games</router-link></li>
         </ul>
       </li>
 
       <!-- Category Management -->
       <li class="dropdown" @mouseenter="hover('cat', true)" @mouseleave="hover('cat', false)">
-        <Anchor :to="links.category.root">Category Management ▾</Anchor>
-        <ul class="dropdown-menu" :class="{ show: isOpen && isMobile || openDropdown === 'cat' }">
-          <li><Anchor :to="links.category.add">Add Category</Anchor></li>
-          <li><Anchor :to="links.category.update">Update Category</Anchor></li>
+        <router-link :to="{ name: 'CategoryManagment' }">Category Management ▾</router-link>
+        <ul class="dropdown-menu" :class="{ show: (isOpen && isMobile) || openDropdown === 'cat' }">
+          <!-- ชื่อ route ตามที่ให้มาเป๊ะ ๆ -->
+          <li><router-link :to="{ name: 'AddCategoryView' }">Add Category</router-link></li>
+          <li><router-link :to="{ name: 'UpdateCategory' }">Update Category</router-link></li>
         </ul>
       </li>
 
@@ -34,92 +39,31 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-// If you use Vue Router, switch Anchor to RouterLink by setting USE_ROUTER = true
-const USE_ROUTER = false
+import { useRouter } from 'vue-router'
 
-/**
- * When using Vue Router:
- * 1) set USE_ROUTER = true
- * 2) change your paths below to route names/paths
- */
-const links = {
-  game: {
-    root: USE_ROUTER ? { name: 'GameManagement' } : './game-management.html',
-    add: USE_ROUTER ? { name: 'AddGame' } : './add-game.html',
-    update: USE_ROUTER ? { name: 'UpdateGame' } : './update-game.html',
-  },
-  category: {
-    root: USE_ROUTER ? { name: 'CategoryManagement' } : './category-management.html',
-    add: USE_ROUTER ? { name: 'AddCategory' } : './add-category.html',
-    update: USE_ROUTER ? { name: 'UpdateCategory' } : './update-category.html',
-  },
-  login: USE_ROUTER ? { name: 'AdminLogin' } : '/admin/admin-login.html',
-}
+const router = useRouter()
 
-// Mobile menu state
 const isOpen = ref(false)
 const openDropdown = ref('')
 
 const isMobile = computed(() => window.innerWidth <= 768)
 
 function hover(which, state) {
-  if (!isMobile.value) {
-    openDropdown.value = state ? which : ''
-  }
+  if (!isMobile.value) openDropdown.value = state ? which : ''
 }
 
 function handleResize() {
-  // Close menus when switching breakpoints
-  if (!isMobile.value) {
-    isOpen.value = false
-  }
+  if (!isMobile.value) isOpen.value = false
   openDropdown.value = ''
 }
 
-onMounted(() => {
-  window.addEventListener('resize', handleResize)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize)
-})
+onMounted(() => window.addEventListener('resize', handleResize))
+onBeforeUnmount(() => window.removeEventListener('resize', handleResize))
 
 function logoutAdmin() {
-  // Align with your backend token storage
   localStorage.removeItem('adminToken')
   localStorage.removeItem('adminProfile')
-  // Navigate to login page
-  if (USE_ROUTER) {
-    // router.push({ name: 'AdminLogin' })
-    window.location.href = typeof links.login === 'string' ? links.login : '/admin/admin-login.html'
-  } else {
-    window.location.href = typeof links.login === 'string' ? links.login : '/admin/admin-login.html'
-  }
-}
-</script>
-
-<script>
-import { h } from 'vue'
-import { RouterLink } from 'vue-router'
-
-export default {
-  components: {
-    // Lightweight anchor: string -> <a href="...">, object -> <RouterLink :to="...">
-    Anchor: {
-      name: 'Anchor',
-      props: { to: { type: [String, Object], required: true } },
-      setup(props, { slots }) {
-        return () => {
-          const content = slots.default ? slots.default() : []
-          if (typeof props.to === 'string') {
-            return h('a', { href: props.to }, content)
-          }
-          // ถ้าใช้ router ให้ลิงก์ภายในเป็น RouterLink
-          return h(RouterLink, { to: props.to }, content)
-        }
-      },
-    },
-  },
+  router.replace({ name: 'adminlogin' })
 }
 </script>
 
