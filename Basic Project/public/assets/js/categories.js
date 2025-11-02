@@ -1,132 +1,199 @@
-document.addEventListener("DOMContentLoaded", function () {
-    let categoriesData = [];
-    let allGamesData = [];
-    let currentCategoryGames = [];
-    let inCategoryView = false;
+document.addEventListener('DOMContentLoaded', async function () {
+    const categoriesContainer = document.getElementById('categories');
+    const gamesContainer = document.getElementById('games-container');
+    const gamesList = document.getElementById('games-list');
+    const searchBar = document.getElementById('search-bar');
+    
+    let allGames = [];
+    let currentCategory = null;
 
-    function normalizeText(text) {
-        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+    // Fetch and display categories
+    async function fetchCategories() {
+        try {
+            console.log("📂 Fetching categories...");
+            const response = await fetch('http://localhost:3000/api/categories');
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch categories');
+            }
+            
+            const categories = await response.json();
+            console.log("✅ Categories loaded:", categories);
+            
+            displayCategories(categories);
+        } catch (error) {
+            console.error("❌ Error fetching categories:", error);
+            categoriesContainer.innerHTML = '<p style="color: white; text-align: center;">Error loading categories. Please try again.</p>';
+        }
     }
 
+    // Display categories
     function displayCategories(categories) {
-        const categoriesContainer = document.getElementById("categories");
-        categoriesContainer.innerHTML = ""; 
-
+        categoriesContainer.innerHTML = '';
+        
         if (categories.length === 0) {
-            categoriesContainer.innerHTML = `<p class="no-results">No categories found.</p>`;
+            categoriesContainer.innerHTML = '<p style="color: white; text-align: center;">No categories available.</p>';
             return;
         }
 
         categories.forEach(category => {
-            const categoryElement = document.createElement("div");
-            categoryElement.classList.add("category");
+            const categoryElement = document.createElement('div');
+            categoryElement.classList.add('category-item');
             categoryElement.innerHTML = `
-                <img src="${category.thumbnail}" alt="${category.name}">
-                <div class="game-info">
-                    <h3>${category.name}</h3>
-                </div>
+                <img src="${category.thumbnail || 'assets/images/default-category.jpg'}" alt="${category.name}">
+                <h3>${category.name}</h3>
             `;
-
-            categoryElement.addEventListener("click", function () {
-                showGamesForCategory(category.id);
+            
+            categoryElement.addEventListener('click', () => {
+                currentCategory = category.id;
+                fetchGamesByCategory(category.id);
             });
-
+            
             categoriesContainer.appendChild(categoryElement);
         });
     }
 
-    function showGamesForCategory(category_id) {
-        fetch(`http://localhost:3000/api/games?category_id=${category_id}`)
-            .then(response => response.json())
-            .then(games => {
-                currentCategoryGames = games;
-                inCategoryView = true;
-                displayGames(games);
-                
-                document.getElementById("categories").style.display = "none";
-                document.getElementById("games-container").style.display = "block";
-            })
-            .catch(error => console.error("Error fetching games:", error));
+    // Fetch games by category
+    async function fetchGamesByCategory(categoryId) {
+        try {
+            console.log(`🎮 Fetching games for category ${categoryId}...`);
+            const response = await fetch(`http://localhost:3000/api/games?category_id=${categoryId}`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch games');
+            }
+            
+            const games = await response.json();
+            console.log("✅ Games loaded:", games);
+            
+            allGames = games;
+            displayGames(games);
+            showGamesView();
+        } catch (error) {
+            console.error("❌ Error fetching games:", error);
+            gamesList.innerHTML = '<p style="color: white; text-align: center;">Error loading games. Please try again.</p>';
+        }
     }
 
+    // Display games
     function displayGames(games) {
-        const gamesList = document.getElementById("games-list");
-        gamesList.innerHTML = "";
-
+        gamesList.innerHTML = '';
+        
         if (games.length === 0) {
-            gamesList.innerHTML = `<p class="no-results">No games match your search.</p>`;
+            gamesList.innerHTML = '<p style="color: white; text-align: center; padding: 50px;">No games found in this category.</p>';
             return;
         }
 
         games.forEach(game => {
-            const gameElement = document.createElement("div");
-            gameElement.classList.add("game-card");
+            const gameElement = document.createElement('div');
+            gameElement.classList.add('game-item');
+            
+            // Parse prices
+            const originalPrice = parseFloat(game.price) || 0;
+            const promoPrice = game.promo_price && parseFloat(game.promo_price) > 0 ? parseFloat(game.promo_price) : null;
+            
+            // Build price HTML
+            let priceHTML = '';
+            if (promoPrice !== null && promoPrice < originalPrice) {
+                const discount = Math.round(((originalPrice - promoPrice) / originalPrice) * 100);
+                priceHTML = `
+                    <div class="game-price">
+                        <del style="color: #ff6b6b;">$${originalPrice.toFixed(2)}</del>
+                        <span class="promo-price">$${promoPrice.toFixed(2)}</span>
+                        <span style="color: #ffa500; font-size: 12px; display: block;">-${discount}%</span>
+                    </div>
+                `;
+            } else {
+                priceHTML = `
+                    <div class="game-price">
+                        <span class="normal-price">$${originalPrice.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+            
             gameElement.innerHTML = `
-                <img class="game-image" src="${game.thumbnail}" alt="${game.title}">
+                <img src="${game.thumbnail || 'assets/images/default-game.jpg'}" alt="${game.title}" class="game-image">
                 <div class="game-title">${game.title}</div>
-                <div class="game-price">
-                    <del>$${game.price}</del> <span class="promo-price">$${game.promo_price}</span>
-                </div>
+                ${priceHTML}
             `;
-
-            gameElement.addEventListener("click", () => {
+            
+            // Add click handler to view game details
+            gameElement.addEventListener('click', () => {
                 window.location.href = `gamepage.html?id=${game.game_id}`;
             });
-
+            
             gamesList.appendChild(gameElement);
         });
     }
 
-    function searchHandler(searchTerm) {
-        const normalizedSearchTerm = normalizeText(searchTerm);
+    // Show games view, hide categories
+    function showGamesView() {
+        categoriesContainer.style.display = 'none';
+        gamesContainer.style.display = 'block';
+    }
 
-        if (!inCategoryView) {
-            // If no category is selected, search for categories
-            const filteredCategories = categoriesData.filter(category =>
-                normalizeText(category.name).includes(normalizedSearchTerm)
+    // Show categories view, hide games
+    function showCategories() {
+        categoriesContainer.style.display = 'grid';
+        gamesContainer.style.display = 'none';
+        searchBar.value = '';
+        currentCategory = null;
+        allGames = [];
+    }
+
+    // Search functionality
+    if (searchBar) {
+        searchBar.addEventListener('input', function () {
+            const searchTerm = searchBar.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                if (currentCategory) {
+                    fetchGamesByCategory(currentCategory);
+                } else {
+                    fetchAllGames();
+                }
+                return;
+            }
+            
+            // Filter games by search term
+            const filteredGames = allGames.filter(game => 
+                game.title.toLowerCase().includes(searchTerm) ||
+                (game.developer && game.developer.toLowerCase().includes(searchTerm))
             );
-            displayCategories(filteredCategories);
-        } else {
-            // If inside a category, search for games within that category
-            const filteredGames = currentCategoryGames.filter(game =>
-                normalizeText(game.title).includes(normalizedSearchTerm)
-            );
+            
             displayGames(filteredGames);
+            
+            if (filteredGames.length === 0) {
+                gamesList.innerHTML = `<p style="color: white; text-align: center; padding: 50px;">No games found matching "${searchTerm}"</p>`;
+            }
+        });
+    }
+
+    // Fetch all games for search
+    async function fetchAllGames() {
+        try {
+            console.log("🎮 Fetching all games...");
+            const response = await fetch('http://localhost:3000/api/games');
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch games');
+            }
+            
+            const games = await response.json();
+            console.log("✅ All games loaded:", games);
+            
+            allGames = games;
+            displayGames(games);
+            showGamesView();
+        } catch (error) {
+            console.error("❌ Error fetching games:", error);
+            gamesList.innerHTML = '<p style="color: white; text-align: center;">Error loading games. Please try again.</p>';
         }
     }
 
-    function fetchCategories() {
-        fetch('http://localhost:3000/api/categories')
-            .then(response => response.json())
-            .then(data => {
-                categoriesData = data;
-                displayCategories(categoriesData);
-            })
-            .catch(error => console.error("Error fetching categories:", error));
-    }
+    // Make showCategories globally available
+    window.showCategories = showCategories;
 
-    function fetchAllGames() {
-        fetch('http://localhost:3000/api/games')
-            .then(response => response.json())
-            .then(games => {
-                allGamesData = games;
-            })
-            .catch(error => console.error("Error fetching all games:", error));
-    }
-
-    document.getElementById("search-bar").addEventListener("input", function () {
-        searchHandler(this.value);
-    });
-
-    document.getElementById("back-to-categories").addEventListener("click", function () {
-        document.getElementById("games-container").style.display = "none";
-        document.getElementById("categories").style.display = "grid";
-        document.getElementById("search-bar").value = "";
-        inCategoryView = false;
-        displayCategories(categoriesData);
-    });
-
+    // Initial load
     fetchCategories();
-    fetchAllGames();
 });
-

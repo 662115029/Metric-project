@@ -3,14 +3,16 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function loadCartItems() {
-    const token = localStorage.getItem("token"); // Get user token for authentication
+    const token = localStorage.getItem("token");
 
     if (!token) {
-        document.getElementById("cart-items").innerHTML = "<p>Please log in to view your cart.</p>";
+        document.getElementById("cart-items").innerHTML = "<p style='color: white; text-align: center;'>Please log in to view your cart.</p>";
         return;
     }
 
     try {
+        console.log("🛒 Fetching cart items...");
+        
         const response = await fetch("http://localhost:3000/api/cart", {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -18,14 +20,21 @@ async function loadCartItems() {
         });
 
         if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+                localStorage.removeItem("token");
+                window.location.href = "login.html";
+                return;
+            }
             throw new Error("Failed to load cart items.");
         }
 
         const cartItems = await response.json();
+        console.log("✅ Cart items loaded:", cartItems);
+        
         displayCartItems(cartItems);
     } catch (error) {
-        console.error("Error fetching cart:", error);
-        document.getElementById("cart-items").innerHTML = "<p>Error loading cart.</p>";
+        console.error("❌ Error fetching cart:", error);
+        document.getElementById("cart-items").innerHTML = "<p style='color: white; text-align: center;'>Error loading cart. Please try again.</p>";
     }
 }
 
@@ -34,30 +43,58 @@ function displayCartItems(cartItems) {
     const cartTotalElement = document.getElementById("cart-total-price");
     cartContainer.innerHTML = "";
 
+    if (cartItems.length === 0) {
+        cartContainer.innerHTML = "<p style='color: white; text-align: center; font-size: 18px;'>Your cart is empty.</p>";
+        cartTotalElement.textContent = "0.00";
+        return;
+    }
+
     let totalPrice = 0;
 
     cartItems.forEach(item => {
-        // Ensure price is a number
         const originalPrice = parseFloat(item.price) || 0;
-        const promoPrice = item.promo_price && item.promo_price > 0 ? parseFloat(item.promo_price) : null;
-        const finalPrice = promoPrice ?? originalPrice; // Use promo price if available
+        const promoPrice = item.promo_price && parseFloat(item.promo_price) > 0 ? parseFloat(item.promo_price) : null;
+        const finalPrice = promoPrice !== null ? promoPrice : originalPrice;
         const totalItemPrice = finalPrice * item.quantity;
         totalPrice += totalItemPrice;
 
         const cartItem = document.createElement("div");
         cartItem.classList.add("cart-item");
 
-        let priceDisplay = `<p>$${originalPrice.toFixed(2)} x ${item.quantity} = $${totalItemPrice.toFixed(2)}</p>`;
-        if (promoPrice) {
+        // Build price display HTML
+        let priceDisplay = '';
+        if (promoPrice !== null && promoPrice < originalPrice) {
+            const discount = Math.round(((originalPrice - promoPrice) / originalPrice) * 100);
             priceDisplay = `
-                <p>
-                    <span style="text-decoration: line-through;">$${originalPrice.toFixed(2)}</span>
-                    <span style="color: #e63946;">$${promoPrice.toFixed(2)}</span>
-                    x ${item.quantity} = <strong>$${totalItemPrice.toFixed(2)}</strong>
-                </p>`;
+                <div class="item-price">
+                    <div style="color: #ff6b6b; text-decoration: line-through;">$${originalPrice.toFixed(2)}</div>
+                    <div style="color: #45a049; font-size: 28px;">$${promoPrice.toFixed(2)}</div>
+                    <div style="color: #ffa500; font-size: 14px;">Save ${discount}%</div>
+                    <div style="color: #aaa; margin-top: 10px;">Quantity: ${item.quantity}</div>
+                    <div style="color: white; margin-top: 5px; font-size: 20px;">Total: $${totalItemPrice.toFixed(2)}</div>
+                </div>
+            `;
+        } else {
+            priceDisplay = `
+                <div class="item-price">
+                    <div style="color: white; font-size: 28px;">$${originalPrice.toFixed(2)}</div>
+                    <div style="color: #aaa; margin-top: 10px;">Quantity: ${item.quantity}</div>
+                    <div style="color: white; margin-top: 5px; font-size: 20px;">Total: $${totalItemPrice.toFixed(2)}</div>
+                </div>
+            `;
         }
 
-        cartItem.innerHTML = `<p>${item.title}</p> ${priceDisplay}`;
+        cartItem.innerHTML = `
+            ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}" class="item-image">` : ''}
+            <div class="item-details">
+                <h3 style="color: white; margin: 0 0 10px 0;">${item.title}</h3>
+                <div class="item-actions">
+                    <a class="action-link" onclick="removeFromCart(${item.cart_id})">Remove</a>
+                </div>
+            </div>
+            ${priceDisplay}
+        `;
+        
         cartContainer.appendChild(cartItem);
     });
 
@@ -65,14 +102,49 @@ function displayCartItems(cartItems) {
     cartTotalElement.textContent = totalPrice.toFixed(2);
 }
 
+// Remove single item from cart
+async function removeFromCart(cartId) {
+    const token = localStorage.getItem("token");
 
+    if (!token) {
+        alert("Please log in to remove items from cart.");
+        return;
+    }
 
-// Clear cart function
+    if (!confirm("Are you sure you want to remove this item?")) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3000/api/cart/${cartId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to remove item from cart.");
+        }
+
+        alert("Item removed from cart.");
+        loadCartItems(); // Refresh cart
+    } catch (error) {
+        console.error("Error removing item:", error);
+        alert("Error removing item from cart.");
+    }
+}
+
+// Clear entire cart
 async function clearCart() {
     const token = localStorage.getItem("token");
 
     if (!token) {
         alert("Please log in to clear your cart.");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to remove all items from your cart?")) {
         return;
     }
 
@@ -92,38 +164,43 @@ async function clearCart() {
         loadCartItems(); // Refresh cart
     } catch (error) {
         console.error("Error clearing cart:", error);
+        alert("Error clearing cart.");
     }
 }
 
-
-
+// Proceed to payment / checkout
 async function proceedToPayment() {
     const token = localStorage.getItem("token");
 
     if (!token) {
         alert("Please log in to proceed to payment.");
+        window.location.href = "login.html";
         return;
     }
 
     try {
-        console.log("🛒 Processing payment and adding to library...");
+        console.log("💳 Processing payment...");
         
-        // First, get cart items
+        // Get cart items first
         const cartResponse = await fetch("http://localhost:3000/api/cart", {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
         });
 
+        if (!cartResponse.ok) {
+            throw new Error("Failed to fetch cart");
+        }
+
         const cartItems = await cartResponse.json();
-        console.log("Cart items:", cartItems);
+        console.log("Cart items to purchase:", cartItems);
         
         if (cartItems.length === 0) {
             alert("Your cart is empty!");
             return;
         }
 
-        // Process the purchase and add to library
+        // Process the purchase
         const response = await fetch("http://localhost:3000/api/purchased_games/add", {
             method: "POST",
             headers: {
@@ -140,60 +217,12 @@ async function proceedToPayment() {
             throw new Error(data.message || "Failed to process purchase");
         }
 
-        // Clear the cart after successful purchase
-        await fetch("http://localhost:3000/api/cart/clear", {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
-
         alert("✅ Payment successful! Games added to your library.");
-        window.location.href = "/library.html"; // Redirect to library page
+        
+        // Redirect to library page
+        window.location.href = "library.html";
     } catch (error) {
         console.error("❌ Error during payment:", error);
-        alert("An error occurred during purchase. Please try again.");
+        alert("An error occurred during purchase: " + error.message);
     }
-}
-
-async function loadLibrary() {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-        alert("Please log in to view your library.");
-        return;
-    }
-
-    try {
-        console.log("📢 Requesting purchased games from server..."); // Debugging log
-
-        const response = await fetch("http://localhost:3000/api/purchased-games", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error("Failed to load purchased games.");
-        }
-
-        const purchasedGames = await response.json();
-        console.log("✅ Purchased games received:", purchasedGames); // Debugging log
-        displayLibrary(purchasedGames);
-    } catch (error) {
-        console.error("❌ Error fetching library:", error);
-        document.getElementById("library-items").innerHTML = "<p>Error loading library.</p>";
-    }
-}
-
-const userId = getUserIdFromToken();
-if (userId) {
-    fetch(`/api/purchased-games/${userId}`)
-        .then(response => response.json())
-        .then(games => {
-            console.log("Purchased games:", games); // ✅ Debugging
-        })
-        .catch(error => console.error("Error fetching purchased games:", error));
-} else {
-    console.error("User ID not found in token.");
 }

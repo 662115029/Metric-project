@@ -3,55 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library</title>
+    <title>Library | Game Store</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <script src="assets/js/navbar.js"></script>
+    <style>
+        body {
+            background-color: #2a0808;
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .library-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .library-header {
+            margin-bottom: 40px;
+        }
+        
+        .library-header h1 {
+            font-size: 48px;
+            margin: 0 0 10px 0;
+            color: white;
+        }
+        
+        .library-header p {
+            color: #aaa;
+            font-size: 18px;
+        }
+        
+        .purchased-games {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .purchased-game {
+            background: linear-gradient(to bottom, #2C2C2C 0%, #281616 100%);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .purchased-game:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .purchased-game img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .game-info {
+            padding: 15px;
+        }
+        
+        .game-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .game-info p {
+            margin: 5px 0;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        .play-button {
+            background-color: #4a1010;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .play-button:hover {
+            background-color: #691818;
+        }
+        
+        .empty-library {
+            text-align: center;
+            padding: 100px 20px;
+        }
+        
+        .empty-library h2 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .empty-library p {
+            color: #aaa;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .browse-button {
+            background-color: #4a1010;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        
+        .browse-button:hover {
+            background-color: #691818;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: white;
+            font-size: 20px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Calls the Navbar -->
+    <!-- Navbar -->
     <div id="navbar-container"></div>
 
-    <!-- Library list / User's purchased games -->
-    <div class="purchased-games" id="purchasedGames"></div>
+    <div class="library-container">
+        <div class="library-header">
+            <h1>My Library</h1>
+            <p id="library-count">Loading your games...</p>
+        </div>
+
+        <!-- Library list / User's purchased games -->
+        <div class="purchased-games" id="purchasedGames">
+            <div class="loading">Loading your library...</div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", async function () {
-    const userId = localStorage.getItem("userId"); // Get logged-in user ID
+            const userId = localStorage.getItem("userId");
+            const token = localStorage.getItem("token");
 
-    if (!userId) {
-        document.getElementById("purchasedGames").innerHTML = "<p>Please log in to view your library.</p>";
-        return;
-    }
+            if (!userId || !token) {
+                document.getElementById("purchasedGames").innerHTML = `
+                    <div class="empty-library">
+                        <h2>Please Log In</h2>
+                        <p>You need to be logged in to view your library.</p>
+                        <a href="login.html" class="browse-button">Go to Login</a>
+                    </div>
+                `;
+                document.getElementById("library-count").textContent = "";
+                return;
+            }
 
-    try {
-        const response = await fetch(`/api/purchased-games/${userId}`);
+            try {
+                console.log("📚 Fetching library for user:", userId);
+                
+                const response = await fetch(`http://localhost:3000/api/purchased-games/${userId}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
 
-        if (!response.ok) {
-            throw new Error("Failed to load purchased games.");
-        }
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("userId");
+                        window.location.href = "login.html";
+                        return;
+                    }
+                    throw new Error("Failed to load purchased games.");
+                }
 
-        const games = await response.json();
-        const purchasedGamesContainer = document.getElementById("purchasedGames");
+                const games = await response.json();
+                console.log("✅ Purchased games loaded:", games);
+                
+                const purchasedGamesContainer = document.getElementById("purchasedGames");
+                const libraryCount = document.getElementById("library-count");
 
-        if (games.length === 0) {
-            purchasedGamesContainer.innerHTML = "<p>No games purchased yet.</p>";
-            return;
-        }
+                if (games.length === 0) {
+                    purchasedGamesContainer.innerHTML = `
+                        <div class="empty-library">
+                            <h2>Your Library is Empty</h2>
+                            <p>You haven't purchased any games yet. Browse our store to find your next adventure!</p>
+                            <a href="gamelist.html" class="browse-button">Browse Games</a>
+                        </div>
+                    `;
+                    libraryCount.textContent = "No games in your library yet";
+                    return;
+                }
 
-        games.forEach(game => {
-            const gameElement = document.createElement("div");
-            gameElement.classList.add("purchased-game");
-            gameElement.innerHTML = `
-                <img src="${game.thumbnail}" alt="${game.title}">
-                <h3>${game.title}</h3>
-            `;
-            purchasedGamesContainer.appendChild(gameElement);
+                // Update count
+                libraryCount.textContent = `${games.length} game${games.length !== 1 ? 's' : ''} in your library`;
+
+                // Clear container
+                purchasedGamesContainer.innerHTML = "";
+
+                // Display each game
+                games.forEach(game => {
+                    const gameElement = document.createElement("div");
+                    gameElement.classList.add("purchased-game");
+                    
+                    const purchaseDate = new Date(game.purchase_date).toLocaleDateString();
+                    
+                    gameElement.innerHTML = `
+                        <img src="${game.thumbnail || 'assets/images/default-game.jpg'}" alt="${game.title}">
+                        <div class="game-info">
+                            <h3>${game.title}</h3>
+                            <p>Developer: ${game.developer || 'Unknown'}</p>
+                            <p>Purchased: ${purchaseDate}</p>
+                            <button class="play-button" onclick="playGame(${game.game_id}, '${game.title}')">Play Now</button>
+                        </div>
+                    `;
+                    
+                    // Add click handler to view game details
+                    gameElement.addEventListener('click', function(e) {
+                        if (!e.target.classList.contains('play-button')) {
+                            window.location.href = `gamepage.html?id=${game.game_id}`;
+                        }
+                    });
+                    
+                    purchasedGamesContainer.appendChild(gameElement);
+                });
+            } catch (error) {
+                console.error("❌ Error fetching purchased games:", error);
+                document.getElementById("purchasedGames").innerHTML = `
+                    <div class="empty-library">
+                        <h2>Error Loading Library</h2>
+                        <p>Failed to load your games. Please try again later.</p>
+                        <button class="browse-button" onclick="location.reload()">Retry</button>
+                    </div>
+                `;
+                document.getElementById("library-count").textContent = "";
+            }
         });
-    } catch (error) {
-        console.error("Error fetching purchased games:", error);
-        document.getElementById("purchasedGames").innerHTML = "<p>Failed to load games.</p>";
-    }
-});
+
+        function playGame(gameId, gameTitle) {
+            alert(`Launching ${gameTitle}...\n\nThis would open the game launcher in a real application!`);
+            console.log(`🎮 Playing game ID: ${gameId}`);
+        }
     </script>
 </body>
 </html>
